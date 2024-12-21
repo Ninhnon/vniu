@@ -15,6 +15,7 @@ import { BsFillCheckCircleFill } from 'react-icons/bs';
 import Image from 'next/legacy/image';
 import { useCart } from '@/hooks/useCart';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
+
 function ProductDetailRight({ data, selectedColor, handleColorSelect }) {
   const [showError, setShowError] = useState(false);
   const [selectedSize, setSelectedSize] = useState<{
@@ -40,9 +41,9 @@ function ProductDetailRight({ data, selectedColor, handleColorSelect }) {
       <div className="mb-10">
         {/* Heading */}
         <div className="flex justify-between mb-2">
-          <div className="text-md font-semibold">Chọn màu sắc</div>
+          <div className="text-md font-semibold">Choose Color</div>
           <div className="text-md font-medium text-black/[0.5] cursor pointer">
-            Màu sắc
+            Color
           </div>
         </div>
         {/* Heading */}
@@ -137,13 +138,6 @@ function ProductDetailRight({ data, selectedColor, handleColorSelect }) {
       <div className="flex flex-col gap-2 w-full items-center justify-center">
         {/* Product size */}
         {selectedColor ? (
-          // <Sheet>
-          //   <div>
-          //     <SheetTrigger
-          //       asChild
-          //       as="div"
-          //       className="w-full mx-0 flex items-center justify-center  "
-          //     >
           <Button
             className="w-full py-4 rounded-full bg-black text-white text-lg mt-2
                   font-medium transition-transform active:scale-95 mb-3 hover:opacity-75
@@ -157,69 +151,6 @@ function ProductDetailRight({ data, selectedColor, handleColorSelect }) {
             Add to Cart
           </Button>
         ) : (
-          //       </SheetTrigger>
-          //     </div>
-          //     <SheetContent side={'topRight'} className="w-[400px]">
-          //       <SheetHeader>
-          //         <div className="flex flex-row gap-3 items-center">
-          //           <BsFillCheckCircleFill
-          //             className="text-green-500 mr-2"
-          //             size={20}
-          //           />
-          //           <SheetTitle>Add to Cart Success!</SheetTitle>
-          //         </div>
-          //         <div className=" flex flex-row gap-4 w-full">
-          //           <div className="relative aspect-square h-24 w-16 min-w-fit overflow-hidden rounded">
-          //             <Image
-          //               alt="add to cart"
-          //               src={
-          //                 data?.activeObject?.activeProductImages[0].imageUrl ||
-          //                 '/assets/placeholder.png'
-          //               }
-          //               sizes="(max-width: '768px') 100vw, (max-width: 1200px) 50vw, 33vw"
-          //               layout="fill"
-          //               className="absolute object-cover"
-          //               loading="lazy"
-          //             />
-          //           </div>
-          //           <div className="flex flex-col">
-          //             <span
-          //               className="text-black text-sm
-          // font-medium"
-          //             >
-          //               {data?.name}
-          //             </span>
-          //             <span
-          //               className="text-black text-sm
-          // font-normal"
-          //             >
-          //               Cloth
-          //             </span>
-          //             <span
-          //               className="text-black text-sm
-          // font-normal"
-          //             >
-          //               {selectedColor}
-          //             </span>
-
-          //             <span
-          //               className="text-black text-sm
-          // font-medium"
-          //             >
-          //               {currencyFormat(data?.price)}
-          //             </span>
-          //           </div>
-          //         </div>
-          //         <div className="flex-row flex w-full py-3">
-          //           <Button variant={'outline'} className="w-full ">
-          //             Xem giỏ hàng ({cart?.listItem.length})
-          //           </Button>
-
-          //           <Button className="w-full">Thanh toán</Button>
-          //         </div>
-          //       </SheetHeader>
-          //     </SheetContent>
-          //   </Sheet>
           <div className="w-full flex">
             <Button
               className="w-full py-4  rounded-full bg-black text-white text-lg
@@ -238,19 +169,10 @@ function ProductDetailRight({ data, selectedColor, handleColorSelect }) {
             </Button>
           </div>
         )}
-        {/* <div className="w-full flex ">
-          <Button
-            variant={'outline'}
-            className="w-full py-4 rounded-full border border-black text-lg font-medium transition-transform active:scale-95 flex items-center justify-center gap-2 hover:opacity-75 mb-10"
-          >
-            Yêu thích
-            <IoMdHeartEmpty size={20} />
-          </Button>
-        </div> */}
       </div>
 
       <div>
-        <div className="text-lg font-bold mb-5">Thông tin chi tiết</div>
+        <div className="text-lg font-bold mb-5">Details</div>
         <div className="markdown text-md mb-5">{data?.description}</div>
       </div>
     </div>

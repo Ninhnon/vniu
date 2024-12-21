@@ -27,23 +27,23 @@ const AuthInformationForm = ({
   const [email, setEmail] = useState(user?.email);
   useEffect(() => {
     if (selectedType.size > 0) {
-      const noiThatValueArray = Array.from(selectedType);
-      setUserAddress(noiThatValueArray?.[0]);
+      const addressValueArray = Array.from(selectedType);
+      setUserAddress(addressValueArray?.[0]);
     }
   }, [selectedType]);
   return user && addresses ? (
     <div className="flex flex-col h-full justify-between">
       <div className="w-[95%] h-full flex flex-col gap-y-6">
         <Input
-          placeholder="Nhập đầy đủ họ tên"
+          placeholder="Enter full name"
           value={fullName}
           onChange={(e) => {
             setUserFullname(e.target.value);
           }}
-          label="Họ Tên"
+          label="Full Name"
         />
         <Input
-          placeholder="Nhập email"
+          placeholder="Enter email"
           value={email}
           disabled
           onChange={(e) => {
@@ -52,16 +52,11 @@ const AuthInformationForm = ({
           label="Email"
         />
 
-        {/* <SelectAddress
-          addressValue={addressValue}
-          setAddressValue={setAddressValue}
-        /> */}
-
-        <Label>Địa chỉ</Label>
+        <Label>Address</Label>
         <Select
           key={'method'}
           radius={'md'}
-          label="Địa chỉ"
+          label="Address"
           disallowEmptySelection={true}
           autoFocus={false}
           placeholder="Select address"
@@ -86,7 +81,7 @@ const AuthInformationForm = ({
             setIsAddressModalOpen(true);
           }}
         >
-          Thêm địa chỉ
+          Add Address
         </Button>
         <AddAddress
           isModalOpen={isAddressModalOpen}
@@ -100,7 +95,7 @@ const AuthInformationForm = ({
             setPage('2');
           }}
         >
-          Tiếp tục
+          Continue
         </Button>
       </div>
     </div>

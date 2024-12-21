@@ -29,7 +29,7 @@ function WishLists() {
         >
           <div className="flex justify-between flex-wrap ">
             <h2 className=" text-2xl font-medium sm:text-3xl">
-              Sản phẩm ưa thích
+              Favorite Products
             </h2>
             <Link aria-label="Products" href="/products">
               <div
@@ -39,7 +39,7 @@ function WishLists() {
                   })
                 )}
               >
-                Xem tất cả
+                View All
               </div>
             </Link>
           </div>
@@ -98,7 +98,7 @@ function WishLists() {
                 })}
 
                 <div className="text-xl font-medium text-muted-foreground">
-                  Danh sách sản phẩm yêu thích của bạn còn trống
+                  Your wish list is empty
                 </div>
               </div>
             )}

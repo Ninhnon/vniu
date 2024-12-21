@@ -9,7 +9,8 @@ import { Swiper } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 // import ProductCard from '@/components/ProductCard';
 import { Balancer } from 'react-wrap-balancer';
-function NewArrivals() {
+
+function SalesProduct() {
   return (
     <section className="lg:px-10 px-5 py-10 mt-20 md:mt-25 lg:mb-40">
       <div className=" mx-auto flex flex-col space-y-4 text-center">
@@ -19,10 +20,10 @@ function NewArrivals() {
           className="mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center gap-4 pb-8 pt-6 text-center md:pb-12 md:pt-10 "
         >
           <h1 className="px-1 text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]">
-            TIẾT KIỆM TỚI 50%
+            SAVE UP TO 50%
           </h1>
           <Balancer className="max-w-[46rem] text-lg text-muted-foreground sm:text-xl">
-            Tiết kiệm lên tới 50% sản phẩm. Không cần mã giảm giá.
+            Save up to 50% on products. No discount code needed.
           </Balancer>
         </section>
         {/* <section
@@ -32,7 +33,7 @@ function NewArrivals() {
         >
           <div className="flex justify-between flex-wrap ">
             <h2 className=" text-2xl font-medium sm:text-3xl">
-              Sản phẩm giảm giá
+              Discounted Products
             </h2>
             <Link aria-label="Products" href="/products">
               <div
@@ -42,7 +43,7 @@ function NewArrivals() {
                   })
                 )}
               >
-                Xem tất cả
+                View All
               </div>
             </Link>
           </div>
@@ -87,4 +88,4 @@ function NewArrivals() {
   );
 }
 
-export default NewArrivals;
+export default SalesProduct;

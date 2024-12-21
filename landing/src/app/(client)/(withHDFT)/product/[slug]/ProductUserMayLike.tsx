@@ -1,7 +1,7 @@
 'use client';
 import Loader from '@/components/Loader';
 import { parseJSON } from '@/lib/utils';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import 'swiper/css';
@@ -12,7 +12,7 @@ const ProductUserMayLike = ({ data }) => {
   const router = useRouter();
   return (
     <div>
-      <div className="font-bold text-lg m-3">Có thể bạn sẽ thích:</div>
+      <div className="font-bold text-lg m-3">Maybe you like:</div>
       <Swiper
         style={
           {

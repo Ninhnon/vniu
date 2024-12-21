@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Input, Spinner, Textarea } from '@nextui-org/react';
 import React, { useState } from 'react';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import { parseJSON } from '@/lib/utils';
 import { FaCheckCircle, FaStar, FaExclamationTriangle } from 'react-icons/fa';
 import { Controller, useForm } from 'react-hook-form';
@@ -154,7 +154,7 @@ const ProductReviewForm = ({
             getSession();
           }}
         >
-          Viết Đánh Giá Sản Phẩm
+          Write a Product Review
         </Button>
       </div>
       {/* Check condition to open dialog */}
@@ -177,10 +177,10 @@ const ProductReviewForm = ({
           <div className="flex flex-col w-full h-auto pr-4 gap-6">
             <div className="w-full h-fit flex flex-col pt-2 items-center gap-3">
               <span className="text-[12px] sm:text-sm md:text-base font-semibold">
-                Viết Đánh Giá Sản Phẩm
+                Write a Product Review
               </span>
               <span className="text-[10px] sm:text-sm text-gray-500">
-                Chia sẻ những Trải nghiệm của bạn với Mọi người.
+                Share your experiences with everyone.
               </span>
               <div className="w-full h-fit mt-2 flex flex-row gap-3 items-center">
                 <Image
@@ -198,7 +198,7 @@ const ProductReviewForm = ({
 
             <div className="flex w-full h-fit mt-3 flex-col gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
-                Đánh giá tổng quan
+                Overall Rating
               </Label>
               <div className="flex gap-2 justify-start">
                 {[1, 2, 3, 4, 5].map((star, index) => {
@@ -247,7 +247,7 @@ const ProductReviewForm = ({
 
             <div className="flex w-full flex-col flex-wrap md:flex-nowrap gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
-                Tiêu đề
+                Title
               </Label>
               <Controller
                 control={control}
@@ -269,7 +269,7 @@ const ProductReviewForm = ({
 
             <div className="flex flex-col w-full h-fit gap-2">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
-                Nội dung chi tiết
+                Detailed Content
               </Label>
               <Controller
                 defaultValue={''}
@@ -292,7 +292,7 @@ const ProductReviewForm = ({
 
             <div className="flex flex-col gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
-                Hình ảnh
+                Images
               </Label>
               {files?.length ? (
                 <div className="flex items-center gap-2">
@@ -339,7 +339,7 @@ const ProductReviewForm = ({
                     }
                   }}
                 >
-                  Xác nhận
+                  Confirm
                 </Button>
               </div>
             </div>
@@ -358,7 +358,7 @@ const ProductReviewForm = ({
                     <div className="flex flex-col gap-3 items-center justify-center">
                       <Spinner size="lg" />
                       <div className="text-center font-semibold text-xs sm:text-sm">
-                        Đang lưu đánh giá của bạn...
+                        Saving your review...
                       </div>
                     </div>
                   </DialogCustom>
@@ -378,7 +378,7 @@ const ProductReviewForm = ({
                           size={35}
                         />
                         <div className="text-center font-semibold text-xs sm:text-sm">
-                          Vui lòng chọn số sao!
+                          Please select a star rating!
                         </div>
                       </>
                     ) : !isTitleValid ? (
@@ -388,7 +388,7 @@ const ProductReviewForm = ({
                           size={35}
                         />
                         <div className="text-center font-semibold text-xs sm:text-sm">
-                          Vui lòng nhập tiêu đề!
+                          Please enter a title!
                         </div>
                       </>
                     ) : !isContentValid ? (
@@ -398,7 +398,7 @@ const ProductReviewForm = ({
                           size={35}
                         />
                         <div className="text-center font-semibold text-xs sm:text-sm">
-                          Vui lòng nhập nội dung!
+                          Please enter content!
                         </div>
                       </>
                     ) : null}
@@ -416,7 +416,7 @@ const ProductReviewForm = ({
                   <div className="flex flex-col gap-3 items-center justify-center">
                     <FaCheckCircle className="text-gray-700" size={35} />
                     <div className="text-center font-semibold text-xs sm:text-sm">
-                      Đánh giá đã được lưu!
+                      Review has been saved!
                     </div>
                   </div>
                 </DialogCustom>

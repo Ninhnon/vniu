@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import ProductCard from '@/components/ProductCard';
 import Loader from '@/components/Loader';
+
 function FeaturedProduct() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   console.log(featuredProducts);
@@ -33,7 +34,7 @@ function FeaturedProduct() {
         >
           <div className="flex justify-between flex-wrap ">
             <h2 className=" text-2xl font-medium sm:text-3xl">
-              Sản phẩm đang có sẵn
+              Available Products
             </h2>
             <Link aria-label="Products" href="/products">
               <div
@@ -43,7 +44,7 @@ function FeaturedProduct() {
                   })
                 )}
               >
-                Xem tất cả
+                View All
               </div>
             </Link>
           </div>

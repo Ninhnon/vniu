@@ -13,19 +13,19 @@ const Footer = () => {
           {/* MENU START */}
           <div className="flex flex-col gap-3 shrink-0">
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              Tìm kiếm cửa hàng
+              Store Locator
             </div>
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              trở thành một đối tác
+              Become a Partner
             </div>
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              đăng ký email
+              Sign Up for Email
             </div>
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              gửi phản hồi
+              Send Feedback
             </div>
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              giảm giá cho sinh viên
+              Student Discount
             </div>
           </div>
           {/* MENU END */}
@@ -35,22 +35,22 @@ const Footer = () => {
             {/* MENU START */}
             <div className="flex flex-col gap-3">
               <div className="font-oswald font-medium uppercase text-sm">
-                Tìm kiếm giúp đỡ
+                Get Help
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Tình trạng đơn hàng
+                Order Status
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Giao hàng
+                Delivery
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Trả hàng
+                Returns
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Phương thức thanh toán
+                Payment Methods
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Liên lạc với chúng tôi
+                Contact Us
               </div>
             </div>
             {/* MENU END */}
@@ -58,19 +58,19 @@ const Footer = () => {
             {/* MENU START */}
             <div className="flex flex-col gap-3">
               <div className="font-oswald font-medium uppercase text-sm">
-                về VNIU
+                About VNIU
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Tin tức
+                News
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Thông tin doanh nghiệp
+                Corporate Information
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Nhà đầu tư
+                Investors
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Phương châm
+                Philosophy
               </div>
             </div>
             {/* MENU END */}
@@ -102,7 +102,7 @@ const Footer = () => {
       >
         {/* LEFT START */}
         <div className="text-[12px] text-white/[0.5] hover:text-white cursor-pointer text-center md:text-left">
-          © 2023 VNIU, Inc. All Rights Reserved
+          © 2024 VNIU, Inc. All Rights Reserved
         </div>
         {/* LEFT END */}
 

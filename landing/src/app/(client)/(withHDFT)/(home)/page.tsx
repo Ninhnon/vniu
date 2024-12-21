@@ -1,7 +1,6 @@
 import HomeBanner from '@/components/HomeBanner';
 import { Balancer } from 'react-wrap-balancer';
 import 'react-multi-carousel/lib/styles.css';
-import ShopByCollection from './ShopByCollection';
 import Categories from './Categories';
 import FeaturedProduct from './FeaturedProduct';
 import SalesProduct from './SalesProduct';
@@ -23,7 +22,6 @@ const page = () => {
         }
       />
 
-      <ShopByCollection />
       <SalesProduct />
 
       <ClientSideImage

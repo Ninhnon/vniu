@@ -29,9 +29,7 @@ function LeftCart({ checkedItems, setCheckedItems }) {
     <div>
       {/* <h2 className="text-lg font-semibold">Your Items ({itemCount})</h2> */}
       <div className="w-full">
-        <span className="text-lg font-semibold">
-          Giỏ hàng của bạn ({itemCount})
-        </span>
+        <span className="text-lg font-semibold">Your Cart ({itemCount})</span>
         {isLoading ? (
           <Skeleton className="w-full h-[300px] rounded-lg" />
         ) : null}

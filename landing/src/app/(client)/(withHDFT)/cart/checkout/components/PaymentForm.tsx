@@ -9,7 +9,7 @@ import VnPayCheckout from './childComponents/VnPayCheckout';
 
 const checkOutConst = [
   { value: 'Stripe' },
-  { value: 'Block chain Wallet' },
+  { value: 'Blockchain Wallet' },
   { value: 'VnPay' },
 ];
 export const PaymentForm = ({
@@ -25,8 +25,8 @@ export const PaymentForm = ({
   const isTypeValid = selectedType.size > 0;
   useEffect(() => {
     if (selectedType) {
-      const noiThatValueArray = Array.from(selectedType);
-      setMethod(noiThatValueArray?.[0]);
+      const paymentMethodArray = Array.from(selectedType);
+      setMethod(paymentMethodArray?.[0]);
     }
   }, [selectedType]);
 
@@ -35,15 +35,13 @@ export const PaymentForm = ({
       <Select
         key={'method'}
         radius={'md'}
-        label="Phương thức thanh toán"
+        label="Payment Method"
         isInvalid={isTypeValid || !typeTouched ? false : true}
         errorMessage={
-          isTypeValid || !typeTouched
-            ? ''
-            : 'Vui lòng chọn phương thức thanh toán'
+          isTypeValid || !typeTouched ? '' : 'Please select a payment method'
         }
         autoFocus={false}
-        placeholder="Chọn phương thức thanh toán"
+        placeholder="Select payment method"
         selectedKeys={selectedType}
         onSelectionChange={(keys) => {
           setSelectedType(keys);
@@ -66,7 +64,7 @@ export const PaymentForm = ({
           total={total}
         />
       )}
-      {method === 'Block chain Wallet' && <Web3Checkout />}
+      {method === 'Blockchain Wallet' && <Web3Checkout />}
       {method === 'VnPay' && (
         <VnPayCheckout checkedItems={checkedItems} total={total} />
       )}

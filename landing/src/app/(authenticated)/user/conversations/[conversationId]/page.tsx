@@ -5,7 +5,7 @@ import Header from './components/Header';
 import EmptyState from '@components/EmptyState';
 import dynamic from 'next/dynamic';
 import { getSession } from '@/lib/auth';
-const Body = dynamic(() => import('./components/Body'), { ssr: false });
+const Body = dynamic(() => import('./components/Body'));
 interface IParams {
   conversationId: string;
 }

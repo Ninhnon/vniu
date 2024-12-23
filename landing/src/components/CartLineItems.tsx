@@ -416,7 +416,7 @@ export function CartLineItems({
           onClick={allSelected ? unselectAll : checkAll}
           className="mt-4 w-[120px] max-h-max cursor-pointer bg-black"
         >
-          {allSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
+          {allSelected ? 'Deselect All' : 'Select All'}
         </Button>
       )}
 

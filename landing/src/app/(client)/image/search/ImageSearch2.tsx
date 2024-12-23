@@ -328,7 +328,7 @@ function ImageSearchWithCrop({
 
     try {
       const response = await fetch(
-        'http://localhost:8000/image-search/retrieve-image',
+        'http://vniu.southeastasia.cloudapp.azure.com/image-search/images/search-by-image',
         {
           method: 'POST',
           body: formData,

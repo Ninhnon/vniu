@@ -8,6 +8,7 @@ import AuthProvider from '../../context/AuthProvider';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { ChainProvider } from '@/components/providers/chain-provider';
 import UniqueIdProvider from '@/components/providers/unique-id-provider';
+import Chatbot from '@/components/Chatbot';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -40,6 +41,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                   <QueryProvider>
                     <Toaster />
                     {children}
+                    <Chatbot />
                   </QueryProvider>
                 </ReduxProvider>
               </Web3Provider>

@@ -87,12 +87,7 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
 
     const valuesArrayWard = Array.from(selectedWard);
     const wardCode = valuesArrayWard[0];
-    const wardValue = wards.find((ward) => ward.idWard == wardCode)?.name;
-    console.log('🚀 ~ onSubmit ~ districtValue:', districtValue);
-    console.log('🚀 ~ onSubmit ~ provinceValue:', provinceValue);
-    console.log('🚀 ~ onSubmit ~ wardValue:', wardValue);
-    console.log('🚀 ~ onSubmit ~ streetValue:', streetValue);
-    console.log('🚀 ~ onSubmit ~ houseNumberValue:', houseNumberValue);
+    const wardValue = wards.find((ward) => ward.idCommune == wardCode)?.name;
     // setAddressValue(
     //   `${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtValue}, ${provinceValue}`
     // );
@@ -225,7 +220,7 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
                 onClose={() => setWardTouched(true)}
               >
                 {wards?.map((ward) => (
-                  <SelectItem key={ward.idWard} value={ward.idWard}>
+                  <SelectItem key={ward.idCommune} value={ward.idCommune}>
                     {ward.name}
                   </SelectItem>
                 ))}

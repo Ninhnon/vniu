@@ -3,7 +3,7 @@
 import Loader from '@/components/Loader';
 import { Button } from '@/components/ui/button';
 import { Zoom } from '@/components/ui/zoom-image';
-import { getRequest } from '@/lib/fetch';
+import { getRequest, postRequest } from '@/lib/fetch';
 import { currencyFormat } from '@/lib/utils';
 import { Pagination } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
@@ -19,18 +19,26 @@ const page = () => {
   const { data: orders, isLoading } = useQuery({
     queryKey: ['orders', session?.data?.user?.id],
     queryFn: async () => {
-      const res = await getRequest({
-        endPoint: '/api/order/user?userId=' + session?.data?.user?.id,
+      const res = await postRequest({
+        endPoint: `/api/v1/users/${
+          session?.data?.user?.id
+        }/orders/filter-and-sort?PageSize=10&PageIndex=${1}`,
+        formData: {
+          orderStatusIds: [],
+          paymentMethodIds: [],
+          shippingMethodIds: [],
+        },
+        isFormData: false,
       });
-      return res;
+      return res.value.items;
     },
-    refetchInterval: 1000,
+    // refetchInterval: 1000,
     keepPreviousData: true,
   });
-  console.log('🚀 ~ file: page.tsx:21 ~ page ~ orders:', orders);
+  console.log('🚀 ~ page ~ orders:', orders);
   useEffect(() => {
     if (!isLoading) {
-      setTotalPages(orders?.totalPage);
+      setTotalPages(1);
     }
   }, [isLoading]);
 
@@ -48,24 +56,20 @@ const page = () => {
 
   return (
     <div className="flex flex-col px-10 gap-y-5 py-10">
-      {orders?.data?.map((item) => {
-        console.log(JSON.parse(item?.orderItems?.[0]?.product?.thumbnail)?.url);
+      {orders?.map((item) => {
         return (
           <div className="flex flex-row gap-x-10 ">
             <Zoom>
               <img
                 width={200}
                 height={200}
-                src={JSON.parse(item?.orderItems?.[0]?.product?.thumbnail)?.url}
+                src={item?.orderLines?.[0]?.imageUrl}
               />
             </Zoom>
             <div className="flex flex-col gap-y-3">
-              <div>Mã đơn hàng: {item?.id}</div>
-              <div>Tổng tiền: {currencyFormat(item?.total)}</div>
-              <div>
-                Trạng thái :{' '}
-                {item?.status == 'Pending' ? 'Đang xử lý' : item?.status}
-              </div>
+              <div>Order id: {item?.id}</div>
+              <div>Total: {currencyFormat(item?.orderTotal)}</div>
+              <div>Status : {'pending'}</div>
 
               <OrderDetail data={item} />
             </div>

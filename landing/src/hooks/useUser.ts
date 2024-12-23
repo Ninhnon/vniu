@@ -5,7 +5,6 @@ export const useUser = () => {
     const userDetail = await getRequest({
       endPoint: `/api/v1/users/profile`,
     });
-    console.log('🚀 ~ onGetUserDetail ~ userDetail:', userDetail);
 
     return userDetail.value;
   };

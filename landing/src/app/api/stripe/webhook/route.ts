@@ -1,4 +1,5 @@
 // import prisma from '@/lib/prisma';
+import { postRequest } from '@/lib/fetch';
 import { stripe } from '@/lib/stripe';
 import { headers } from 'next/headers';
 import type Stripe from 'stripe';
@@ -45,78 +46,53 @@ export async function POST(request: Request) {
   if (event.type === 'charge.succeeded') {
     console.log('metadataaaaaaaaaaaaaaaaaaaaaaaaa');
 
-    const { userFullName, checkedItems, userEmail, userAddress, amount, uuid } =
-      session.metadata;
-    // const user = await prisma.user.findUnique({
-    //   where: {
-    //     email: userEmail,
-    //   },
-    // });
-    const user = {
-      id: -1,
-      name: '',
-      email: '',
-      role: '',
-      avatar: '',
-      isEmailVerified: false,
-    };
-    let data = {};
-    if (!user) {
-      data = {
-        anonymousUser: uuid,
-        anonymousUserName: userFullName,
-        anonymousUserEmail: userEmail,
-        address: userAddress,
-        total: parseFloat(amount),
-      };
-    } else {
-      data = {
-        userId: user.id,
-        address: userAddress,
-        total: parseFloat(amount),
-      };
-    }
+    const {
+      userId,
+      userFullName,
+      checkedItems,
+      userEmail,
+      userAddress,
+      amount,
+      uuid,
+      selectedShippingId,
+      selectedPromotionId,
+      selectedPaymentTypeId,
+      addressId,
+    } = session.metadata;
     const orderItems = JSON.parse(checkedItems).map((item: any) => ({
-      productId: item.id,
       quantity: item.quantity,
-      selectedSize: item.selectedSize,
+      sizeOptionName: item.selectedSize,
+      productItemId: item.productItemId,
+      variationId: item.variationId,
+      price: item.price,
+      productName: item.productName,
     }));
-    console.log(
-      '🚀 ~ file: route.ts:76 ~ orderItems ~ orderItems:',
-      orderItems
-    );
-    console.log('🚀 ~ file: route.ts:66 ~ POST ~ data:', data);
-    interface OrderItem {
-      productId: number;
-      quantity: number;
-      selectedSize: string;
+
+    try {
+      // const response = await postRequest({
+      //   endPoint: '/api/v1/orders',
+      //   formData: {
+      //     orderTotal: orderItems.reduce(
+      //       (sum: number, item: any) => sum + item.quantity,
+      //       0
+      //     ),
+      //     note: 'Order note',
+      //     paymentTypeId: selectedPaymentTypeId,
+      //     shippingAddressId: addressId,
+      //     shippingMethodId: selectedShippingId,
+      //     promotionId: selectedPromotionId,
+      //     orderLines: orderItems,
+      //   },
+      //   isFormData: false,
+      // });
+      // console.log('🚀 ~ POST ~ response:', response);
+      // if (!response.ok) {
+      //   throw new Error('Network response was not ok');
+      // }
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
     }
-    // const [order] = await prisma.$transaction([
-    //   prisma.order.create({
-    //     data: {
-    //       ...data,
-    //       orderItems: {
-    //         createMany: { data: [...orderItems] },
-    //       },
-    //     },
-    //   }),
-    // ]);
-    // for (const item of orderItems) {
-    //   await prisma.productSize.updateMany({
-    //     where: {
-    //       productId: item.productId,
-    //       size: item.selectedSize,
-    //     },
-    //     data: {
-    //       quantity: {
-    //         decrement: item.quantity,
-    //       },
-    //     },
-    //   });
-    // }
-
-    console.log('🚀 ~ file: route.ts:84 ~ POST ~ order:', order);
-
+    console.log('🚀 ~ POST ~ session.metadata:', session.metadata);
     //TODO: create order => xong
   }
   return new Response(JSON.stringify('ok'), { status: 200 });

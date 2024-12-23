@@ -8,14 +8,20 @@ const VnPayCheckout = ({ checkedItems, total }) => {
   const [paymentUrl, setPaymentUrl] = useState('');
   useEffect(() => {
     const getPaymentUrl = async () => {
-      const res = await postRequest({
-        endPoint: '/api/vnpay/checkout',
-        formData: {
-          total,
-          checkedItems,
-        },
-        isFormData: false,
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SITE_URL}/api/vnpay/checkout`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            total,
+            checkedItems,
+          }),
+        }
+      );
+
       console.log(
         '🚀 ~ file: VnPayCheckout.tsx:16 ~ getPaymentUrl ~ res:',
         res

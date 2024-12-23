@@ -1,15 +1,25 @@
 import Loader from '@/components/Loader';
 import { Button } from '@/components/ui/button';
+import { postRequest } from '@/lib/fetch';
 import {
   useStripe,
   useElements,
   PaymentElement,
 } from '@stripe/react-stripe-js';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
 
-const StripeForm = ({ callback }) => {
+const StripeForm = ({
+  checkedItems,
+  total,
+  selectedShipping,
+  selectedPromotion,
+  selectedPaymentType,
+  addressId,
+}) => {
+  const session = useSession();
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
@@ -25,15 +35,42 @@ const StripeForm = ({ callback }) => {
       },
       redirect: 'if_required',
     });
+    const dataArray = Object.values(checkedItems).map((item) => {
+      return {
+        quantity: item.quantity,
+        selectedSize: item.selectedSize,
+        productItemId: item.productItemId,
+        variationId: item.variationId,
+        price: item.price,
+        productName: item.productName,
+      };
+    });
+    console.log('🚀 ~ dataArray ~ dataArray:', dataArray);
+
+    const response = await postRequest({
+      endPoint: '/api/v1/orders',
+      formData: {
+        orderTotal: total,
+        userId: session?.data?.user?.id,
+        note: 'Order note',
+        paymentTypeId: selectedPaymentType.id,
+        shippingAddressId: addressId,
+        shippingMethodId: selectedShipping.id,
+        promotionId: selectedPromotion.id,
+        orderLines: dataArray,
+      },
+      isFormData: false,
+    });
+    console.log('🚀 ~ onSubmit ~ response:', response);
+
     setLoading(false);
     if (error) {
       toast.error(error?.message);
     } else if (paymentIntent.status === 'succeeded') {
-      toast.success('Thanh toán thành công');
-      callback && callback();
+      toast.success('Payment successful');
       router.push('/user/profile/orders');
     } else {
-      toast.error('Thanh toán thất bại');
+      toast.error('Payment failed');
     }
   };
   return stripe && elements ? (
@@ -42,13 +79,13 @@ const StripeForm = ({ callback }) => {
         <PaymentElement />
         <div className="w-full flex items-center justify-center">
           <Button disabled={loading} className="w-[60%]" onClick={onSubmit}>
-            <span>Thanh toán</span>
+            <span>Pay</span>
           </Button>
         </div>
         {loading ? (
           <div className="w-full flex items-center justify-center">
             <Loader />
-            Thanh toán của bạn đang được xử lý...
+            Your payment is being processed...
           </div>
         ) : null}
       </div>

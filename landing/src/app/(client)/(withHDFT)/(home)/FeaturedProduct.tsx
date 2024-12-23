@@ -9,16 +9,28 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import ProductCard from '@/components/ProductCard';
 import Loader from '@/components/Loader';
+import { postRequest } from '@/lib/fetch';
 
 function FeaturedProduct() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   console.log(featuredProducts);
   useEffect(() => {
     const getFeaturedProducts = async () => {
-      const res = await fetch('/api/product/featured');
-      const data = await res.json();
-      if (data) {
-        setFeaturedProducts(data);
+      const res = await postRequest({
+        endPoint: '/api/v1/products/filter-and-sort?PageSize=8&PageIndex=1',
+        formData: {
+          CategoryIds: [],
+          ratingValue: 0,
+          minPrice: 0,
+          maxPrice: 300,
+          colourIds: [],
+          sizeOptionIds: [],
+          productItemIds: [],
+        },
+        isFormData: false,
+      });
+      if (res) {
+        setFeaturedProducts(res.value.items);
       }
     };
     getFeaturedProducts();

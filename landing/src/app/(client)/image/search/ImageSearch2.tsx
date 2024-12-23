@@ -327,14 +327,17 @@ function ImageSearchWithCrop({
     formData.append('file', blob, 'cropped.jpg');
 
     try {
-      const response = await fetch('http://localhost:8000/retrieve-image/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
+      const response = await fetch(
+        'http://localhost:8000/image-search/retrieve-image',
+        {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Accept: 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      );
       const data = await response.json();
       await setProductItemIds(data.productItemIds);
     } catch (err) {

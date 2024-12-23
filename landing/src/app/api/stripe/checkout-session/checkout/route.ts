@@ -1,36 +1,59 @@
+import { postRequest } from '@/lib/fetch';
 import { stripe } from '@/lib/stripe';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     console.log('🚀 ~ file: route.ts:7 ~ POST ~ body:', body);
-
-    // if (!body.userId) return new Response('Unauthorized', { status: 401 });
-    // const user = await prisma.user.findUnique({
-    //   where: { id: body.userId },
-    // });
-    // const billing_url = `${process.env.NEXT_PUBLIC_SITE_URL}/agency/goi-dich-vu`;
-
-    // if (!user) return new Response('Unauthorized', { status: 401 });
     try {
       const stripeSession = await stripe.paymentIntents.create({
         amount: body.amount,
-        currency: 'vnd',
+        currency: 'usd',
         payment_method_types: ['card'],
         metadata: {
-          // userId: user.id,
+          userId: body.userId,
           checkedItems: JSON.stringify(body.checkedItems),
           amount: body.amount,
           userFullName: body.userFullName,
           userEmail: body.userEmail,
           userAddress: body.userAddress,
           uuid: body.uuid,
+          selectedShippingId: body.selectedShippingId,
+          selectedPromotionId: body.selectedPromotionId,
+          selectedPaymentTypeId: body.selectedPaymentTypeId,
+          addressId: body.addressId,
         },
       });
-      console.log(
-        '🚀 ~ file: route.ts:32 ~ POST ~ stripeSession:',
-        stripeSession
-      );
+      // const orderItems = body.checkedItems.map((item: any) => ({
+      //   quantity: item.quantity,
+      //   sizeOptionName: item.selectedSize,
+      //   productItemId: item.productItemId,
+      //   variationId: item.variationId,
+      //   price: item.price,
+      //   productName: item.productName,
+      // }));
+      // try {
+      //   const response = await postRequest({
+      //     endPoint: '/api/v1/orders',
+      //     formData: {
+      //       orderTotal: orderItems.reduce(
+      //         (sum: number, item: any) => sum + item.quantity,
+      //         0
+      //       ),
+      //       note: 'Order note',
+      //       paymentTypeId: body.selectedPaymentTypeId,
+      //       shippingAddressId: body.addressId,
+      //       shippingMethodId: body.selectedShippingId,
+      //       promotionId: body.selectedPromotionId,
+      //       orderLines: orderItems,
+      //     },
+      //     isFormData: false,
+      //   });
+      //   console.log('🚀 ~ POST ~ response:', response);
+      // } catch (e) {
+      //   console.log(e);
+      //   return new Response('Unauthorized', { status: 401 });
+      // }
       return new Response(
         JSON.stringify({ clientSecret: stripeSession.client_secret }),
         {

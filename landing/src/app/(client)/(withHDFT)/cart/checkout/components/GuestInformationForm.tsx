@@ -1,52 +1,42 @@
-'use client';
-
-import { SelectAddress } from '@/components/select-address';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import React from 'react';
 
 const GuestInformationForm = ({
-  setPage,
-  addressValue,
-  setAddressValue,
-  fullName,
-  setFullName,
   email,
   setEmail,
+  fullName,
+  setFullName,
+  addressValue,
+  setAddressValue,
+  setPage,
 }) => {
   return (
     <div className="flex flex-col h-full justify-between">
       <div className="w-[95%] h-full flex flex-col gap-y-6">
         <Input
-          placeholder="Enter your Full name"
+          placeholder="Enter full name"
           value={fullName}
-          onChange={(e) => {
-            setFullName(e.target.value);
-          }}
-          label="Full name"
+          onChange={(e) => setFullName(e.target.value)}
+          label="Full Name"
         />
         <Input
-          placeholder="Enter your Email"
+          placeholder="Enter email"
           value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          onChange={(e) => setEmail(e.target.value)}
           label="Email"
         />
-
-        <SelectAddress
-          addressValue={addressValue}
-          setAddressValue={setAddressValue}
+        <Input
+          placeholder="Enter address"
+          value={addressValue}
+          onChange={(e) => setAddressValue(e.target.value)}
+          label="Address"
         />
       </div>
       <div className="mt-20 w-full flex justify-center">
-        <Button
-          onClick={() => {
-            setPage('2');
-          }}
-          disabled={!addressValue || !fullName || !email}
-        >
-          Next
+        <Button className="w-32" onClick={() => setPage('2')}>
+          Continue
         </Button>
       </div>
     </div>

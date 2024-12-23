@@ -15,71 +15,85 @@ const AuthInformationForm = ({
   setUserFullname,
   setUserAddress,
   setUserEmail,
+  setAddressId,
 }) => {
-  const [addressValue, setAddressValue] = useState(
-    addresses?.[0]?.addressValue
-  );
-  const [selectedType, setSelectedType] = React.useState(
-    new Set([addresses?.[0]?.addressValue?.toString()])
-  );
+  const [addressList, setAddressList] = useState([]);
+  const [selectedType, setSelectedType] = useState(new Set());
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [fullName, setFullName] = useState(user?.fullName);
-  const [email, setEmail] = useState(user?.email);
+  const [fullName, setFullName] = useState(user?.fullName || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [phone, setPhone] = useState(user?.phone || '');
+
+  useEffect(() => {
+    if (addresses) {
+      const addressTemps = addresses.map((address) => ({
+        addressId: address?.id,
+        addressValue: `${address?.unitNumber}, ${address?.streetNumber}, ${address?.addressLine1}, ${address?.city}, ${address?.province}`,
+      }));
+      setAddressList(addressTemps);
+      if (addressTemps.length > 0) {
+        setSelectedType(new Set([addressTemps[0].addressValue]));
+        setUserAddress(addressTemps[0].addressValue);
+        setAddressId(addressTemps[0].addressId);
+      }
+    }
+  }, [addresses, setUserAddress]);
+
   useEffect(() => {
     if (selectedType.size > 0) {
       const addressValueArray = Array.from(selectedType);
-      setUserAddress(addressValueArray?.[0]);
+      setUserAddress(addressValueArray[0]);
     }
-  }, [selectedType]);
+  }, [selectedType, setUserAddress]);
+
   return user && addresses ? (
     <div className="flex flex-col h-full justify-between">
       <div className="w-[95%] h-full flex flex-col gap-y-6">
         <Input
           placeholder="Enter full name"
           value={fullName}
-          onChange={(e) => {
-            setUserFullname(e.target.value);
-          }}
+          onChange={(e) => setFullName(e.target.value)}
           label="Full Name"
         />
         <Input
           placeholder="Enter email"
           value={email}
-          disabled
-          onChange={(e) => {
-            setUserEmail(e.target.value);
-          }}
+          onChange={(e) => setEmail(e.target.value)}
           label="Email"
+        />
+        <Input
+          placeholder="Enter phone number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          label="Phone Number"
         />
 
         <Label>Address</Label>
         <Select
-          key={'method'}
-          radius={'md'}
+          key="method"
+          radius="md"
           label="Address"
-          disallowEmptySelection={true}
+          disallowEmptySelection
           autoFocus={false}
           placeholder="Select address"
           selectedKeys={selectedType}
-          onSelectionChange={(keys) => {
-            setSelectedType(keys);
-          }}
+          onSelectionChange={(keys) => setSelectedType(keys)}
           className="max-w-xs lg:max-w-lg"
         >
-          {addresses?.map((item) => {
-            return (
-              <SelectItem key={item?.addressValue} value={item.addressValue}>
-                {item?.addressValue}
-              </SelectItem>
-            );
-          })}
+          {addressList.map((item) => (
+            <SelectItem
+              key={item.addressValue}
+              value={item.addressValue}
+              textValue={item.addressValue}
+            >
+              {item.addressValue}
+            </SelectItem>
+          ))}
         </Select>
         <Button
           disabled={!fullName || !email}
           className="w-32"
-          onClick={() => {
-            setIsAddressModalOpen(true);
-          }}
+          onClick={() => setIsAddressModalOpen(true)}
         >
           Add Address
         </Button>
@@ -89,12 +103,7 @@ const AuthInformationForm = ({
         />
       </div>
       <div className="mt-20 w-full flex justify-center">
-        <Button
-          className="w-32"
-          onClick={() => {
-            setPage('2');
-          }}
-        >
+        <Button className="w-32" onClick={() => setPage('2')}>
           Continue
         </Button>
       </div>

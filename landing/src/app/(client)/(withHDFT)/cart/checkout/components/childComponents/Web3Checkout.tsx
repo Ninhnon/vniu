@@ -21,6 +21,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { postRequest } from '@/lib/fetch';
 import toast from 'react-hot-toast';
 import { Input } from '@/components/ui/input';
+import { useUser } from '@/hooks/useUser';
 const tokenAddress = '0xf0698869A8DCb2175b84059D7DF8A20AB233cf53';
 const contractAddress = '0xD5b2d91f7E04667728eb2E38327f559D998d6919';
 const receiver = '0x9feacc5E9509C1A198ff4E65B4096C289A176287';
@@ -34,7 +35,7 @@ export const Web3Checkout = () => {
   const session = useSession();
   const queryClient = useQueryClient();
 
-  const { onGetUserDetail } = useAuth();
+  const { onGetUserDetail } = useUser();
   const { data: userDetail } = useQuery({
     queryKey: ['userDetail', session?.data?.user?.id],
     queryFn: () => onGetUserDetail({ userId: session?.data?.user?.id }),

@@ -319,8 +319,16 @@ export function CartLineItems({
   const checkAll = () => {
     const newCheckedItems = {};
     cart?.listItem.forEach((item) => {
+      console.log('🚀 ~ cart?.listItem.forEach ~ item:', item);
       const itemKey = `${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`;
-      newCheckedItems[itemKey] = { ...item, quantity: item.quantity };
+      newCheckedItems[itemKey] = {
+        ...item,
+        quantity: item.quantity,
+        productName: item.data.productName,
+        price: item.data.salePrice,
+        productItemId: item.data.cartItem.productItemId,
+        variationId: item.data.cartItem.variationId,
+      };
     });
     setCheckedItems(newCheckedItems);
     setAllSelected(true);
@@ -331,9 +339,20 @@ export function CartLineItems({
   // Start control checkbox
 
   const handleCheck = (id, isChecked, item, uiQuantity) => {
+    console.log('🚀 ~ handleCheck ~ item:', item);
     setCheckedItems((prevState) => {
       if (isChecked) {
-        return { ...prevState, [id]: { ...item, quantity: uiQuantity } };
+        return {
+          ...prevState,
+          [id]: {
+            ...item,
+            quantity: uiQuantity,
+            productName: item.data.productName,
+            price: item.data.salePrice,
+            productItemId: item.data.cartItem.productItemId,
+            variationId: item.data.cartItem.variationId,
+          },
+        };
       } else {
         const newState = { ...prevState };
         delete newState[id];

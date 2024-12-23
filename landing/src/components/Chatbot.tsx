@@ -24,7 +24,7 @@ const Chatbot = () => {
 
       try {
         const response = await fetch(
-          'https://vniu.southeastasia.cloudapp.azure.com/api/v1/chat-messages/chatbot',
+          'http://vniu.southeastasia.cloudapp.azure.com/api/v1/chat-messages/chatbot',
           {
             method: 'POST',
             headers: {

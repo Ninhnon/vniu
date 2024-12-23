@@ -24,7 +24,7 @@ const Chatbot = () => {
 
       try {
         const response = await fetch(
-          'http://vniu.southeastasia.cloudapp.azure.com/api/v1/chat-messages/chatbot',
+          'https://vniu.southeastasia.cloudapp.azure.com/api/v1/chat-messages/chatbot',
           {
             method: 'POST',
             headers: {
@@ -34,6 +34,7 @@ const Chatbot = () => {
             body: JSON.stringify({ content: input }),
           }
         );
+        console.log('🚀 ~ handleSend ~ response:', response);
 
         const data = await response.json();
         const chatbotResponseData = data.value;

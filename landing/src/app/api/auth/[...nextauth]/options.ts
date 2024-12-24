@@ -131,7 +131,6 @@ const options: AuthOptions = {
     },
 
     async session({ token, session }) {
-      console.log('token in sessionnnnnnnnnnnnnnnnn: ', token);
       if (session.user) {
         (session.user as { id: string }).id = token.id as string;
         (session.user as { name: string }).name = token.name as string;

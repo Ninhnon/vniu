@@ -34,7 +34,6 @@ const AddProductDialog = () => {
     onToggleSuccess,
     // onUnselectProduct,
   } = useSelectedProduct();
-  console.log('🚀 ~ AddProductDialog ~ selectedProduct:', selectedProduct);
   const [selectedSize, setSizeSelected] = useState(null);
 
   const [selectedQuantity, setSelectedQuantity] = useState(null);

@@ -1,6 +1,7 @@
 'use client';
 import AuthSvg from '@/assets/AuthSvg';
-import React, { useState, useCallback } from 'react';
+import { postRequest } from '@/lib/fetch';
+import React, { useState } from 'react';
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,21 +24,24 @@ const Chatbot = () => {
       setInput('');
 
       try {
-        const response = await fetch(
-          'http://vniu.southeastasia.cloudapp.azure.com/api/v1/chat-messages/chatbot',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({ content: input }),
-          }
-        );
-        console.log('🚀 ~ handleSend ~ response:', response);
+        // const response = await fetch(
+        //   'https://cors-anywhere.herokuapp.com/http://vniu.southeastasia.cloudapp.azure.com/api/v1/chat-messages/chatbot',
+        //   {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       // 'Access-Control-Allow-Origin': '*', // This header should be set by the server, not the client
+        //     },
+        //     body: JSON.stringify({ content: input }),
+        //   }
+        // );
+        const response = await postRequest({
+          endPoint: '/api/v1/chat-messages/chatbot',
+          formData: { content: input },
+          isFormData: false,
+        });
 
-        const data = await response.json();
-        const chatbotResponseData = data.value;
+        const chatbotResponseData = response.value;
 
         const botMessage = {
           id: messages.length + 2,

@@ -18,7 +18,6 @@ import { getRequest } from '@/lib/fetch';
 function page() {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const session = useSession();
-  console.log('🚀 ~ file: page.tsx:16 ~ page ~ session:', session);
   const { data: userInfo } = useQuery({
     queryKey: ['userInfo', session?.data?.user?.id],
     queryFn: async () => {
@@ -28,17 +27,19 @@ function page() {
     },
     enabled: !!session?.data?.user?.id,
   });
+
   const { data: userAddresses, isLoading: isLoadingUserAddresses } = useQuery(
     ['userAddresses', session?.data?.user?.id],
     async () => {
       const res = await getRequest({
-        endPoint: `/api/user/address?id=${session?.data?.user?.id}`,
+        endPoint: `/api/v1/users/${session?.data?.user?.id}/addresses/filter-and-sort?PageSize=10&PageIndex=1`,
       });
-      console.log('🚀 ~ file: ProfileForm.tsx:25 ~ res:', res);
-      return res;
+      return res.value.items;
     },
     { enabled: !!session?.data?.user?.id }
   );
+  console.log('🚀 ~ page ~ userAddresses:', userAddresses);
+
   const [isOpen, setIsOpen] = React.useState(false);
   const { onGetUserDetail } = useUser();
   if (!isLoaded)
@@ -47,23 +48,25 @@ function page() {
         <Loader />;
       </div>
     );
-
+  const address =
+    `${userAddresses?.[0]?.unitNumber}, ${userAddresses?.[0]?.streetNumber}, ${userAddresses?.[0]?.addressLine1}, ${userAddresses?.[0]?.city}, ${userAddresses?.[0]?.province}` ||
+    '';
   return (
     <div>
-      <h1 className="text-xl font-medium">Hồ sơ </h1>
+      <h1 className="text-xl font-medium">Profile </h1>
       <Button
         onClick={() => {
           setIsOpen(true);
         }}
       >
-        Sửa thông tin{' '}
+        Edit Info
       </Button>
       <Card className="bg-white p-6 rounded-lg shadow-md relative mt-4">
         <div className="flex flex-col gap-6 mt-4">
           <div className="w-full flex justify-center">
             <div className="border-2 border-red-400 rounded-full w-[180px] md:w-[270px] h-[180px] md:h-[270px] overflow-hidden">
               <img
-                src={userInfo?.avatar}
+                src={userInfo?.avatarUrl}
                 className="w-full h-full object-cover"
                 alt={''}
               />
@@ -71,19 +74,17 @@ function page() {
           </div>
           <div className="w-full space-y-4">
             <div>
-              <p className="text-sm text-gray-600">Họ tên</p>
+              <p className="text-sm text-gray-600">Full Name</p>
               <div className="flex flex-row gap-2">
                 <MdPermIdentity className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                <p className="text-sm text-slate-800">{userInfo?.name}</p>
+                <p className="text-sm text-slate-800">{userInfo?.fullName}</p>
               </div>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Điện thoại</p>
+              <p className="text-sm text-gray-600">Number Phone</p>
               <div className="flex flex-row gap-2">
                 <IoIosPhonePortrait className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                <p className="text-sm text-slate-800">
-                  {userInfo?.phoneNumber}
-                </p>
+                <p className="text-sm text-slate-800">0123456789</p>
               </div>
             </div>
             <div>
@@ -94,12 +95,10 @@ function page() {
               </div>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Địa chỉ</p>
+              <p className="text-sm text-gray-600">Address</p>
               <div className="flex flex-row gap-2">
                 <CiLocationOn className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                <p className="text-sm text-slate-800">
-                  {userAddresses?.[0]?.addressValue}
-                </p>
+                <p className="text-sm text-slate-800">{address}</p>
               </div>
             </div>
           </div>

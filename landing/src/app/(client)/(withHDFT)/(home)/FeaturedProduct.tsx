@@ -13,7 +13,6 @@ import { postRequest } from '@/lib/fetch';
 
 function FeaturedProduct() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
-  console.log(featuredProducts);
   useEffect(() => {
     const getFeaturedProducts = async () => {
       const res = await postRequest({

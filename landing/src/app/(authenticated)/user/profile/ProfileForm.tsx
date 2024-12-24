@@ -105,7 +105,7 @@ const ProfileForm = ({
     <div className="px-1 flex flex-col gap-y-3">
       <div className="flex flex-col gap-y-3 w-full">
         <div className="font-bold text-sm">
-          Ảnh đại diện <span className="text-red-500">*</span>
+          Avatar<span className="text-red-500">*</span>
         </div>
         <div className="w-full flex flex-col gap-3 justify-center items-center">
           <div className="border-2 border-red-400 rounded-full w-[180px] md:w-[270px] h-[180px] md:h-[270px] overflow-hidden">
@@ -178,7 +178,7 @@ const ProfileForm = ({
           setIsModalOpen(true);
         }}
       >
-        Thêm địa chỉ
+        Add Address
       </Button>
 
       {isModalOpen && (
@@ -191,7 +191,7 @@ const ProfileForm = ({
           }}
           className="w-[50%] mt-12"
         >
-          Sửa thông tin{' '}
+          Edit info
         </Button>
       </div>
     </div>

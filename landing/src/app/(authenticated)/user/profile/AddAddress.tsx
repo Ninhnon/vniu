@@ -122,7 +122,7 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
       });
       if (!response.isSuccess) {
         throw new Error('Failed to add to address');
-      } else toast.success('Thêm địa chỉ thành công');
+      } else toast.success('Add address successfully');
     }
     queryClient.refetchQueries(['userInfo', session?.data?.user?.id]);
     queryClient.refetchQueries(['userAddresses', session?.data?.user?.id]);

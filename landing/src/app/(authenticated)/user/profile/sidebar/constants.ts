@@ -1,17 +1,17 @@
 export const mainNavItems = [
   {
-    title: 'Hồ sơ',
+    title: 'Dashboard',
     icon: 'news',
     items: [
       {
-        title: 'Trang chủ',
+        title: 'Home',
         href: '/',
         description: 'All the products we have to offer.',
 
         items: [],
       },
       {
-        title: 'Đơn hàng',
+        title: 'Orders',
         href: '/user/profile/orders',
         description: 'All the products we have to offer.',
 

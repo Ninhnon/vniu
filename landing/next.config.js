@@ -58,6 +58,12 @@ const nextConfig = {
             }
             ,
             {
+                protocol: 'http',
+                hostname: 'res.cloudinary.com',
+                port: '',
+            }
+            ,
+            {
                 protocol: 'https',
                 hostname: 'i.dummyjson.com',
                 port: '',

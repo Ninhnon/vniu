@@ -2,6 +2,7 @@
 import AuthSvg from '@/assets/AuthSvg';
 import { postRequest } from '@/lib/fetch';
 import React, { useState } from 'react';
+import { Zoom } from './ui/zoom-image';
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,17 +25,6 @@ const Chatbot = () => {
       setInput('');
 
       try {
-        // const response = await fetch(
-        //   'https://cors-anywhere.herokuapp.com/http://vniu.southeastasia.cloudapp.azure.com/api/v1/chat-messages/chatbot',
-        //   {
-        //     method: 'POST',
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       // 'Access-Control-Allow-Origin': '*', // This header should be set by the server, not the client
-        //     },
-        //     body: JSON.stringify({ content: input }),
-        //   }
-        // );
         const response = await postRequest({
           endPoint: '/api/v1/chat-messages/chatbot',
           formData: { content: input },
@@ -86,11 +76,13 @@ const Chatbot = () => {
                 >
                   <div className="text-sm">{message.text}</div>
                   {message.image && (
-                    <img
-                      src={message.image}
-                      alt="Chatbot response"
-                      className="mt-2 max-w-full h-auto rounded"
-                    />
+                    <Zoom>
+                      <img
+                        src={message.image}
+                        alt="Chatbot response"
+                        className="mt-2 max-w-full h-auto rounded"
+                      />
+                    </Zoom>
                   )}
                   <div className="text-xs text-gray-500">
                     {message.timestamp}

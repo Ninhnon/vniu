@@ -115,14 +115,14 @@ export function CartSheet() {
               <SheetFooter className="mt-1.5">
                 <SheetTrigger asChild>
                   <Link
-                    aria-label="Xem giỏ hàng của bạn"
+                    aria-label="See you cart"
                     href="/cart"
                     className={buttonVariants({
                       size: 'sm',
                       className: 'w-full',
                     })}
                   >
-                    Xem giỏ hàng của bạn
+                    See you cart
                   </Link>
                 </SheetTrigger>
               </SheetFooter>

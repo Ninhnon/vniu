@@ -1,3 +1,4 @@
-import { utapi } from 'uploadthing/server';
-
-export { utapi as uploadthingApi };
+import { UTApi } from 'uploadthing/server';
+export const utapi = new UTApi({
+  apiKey: process.env.UPLOADTHING_SECRET, // YOUR UPLOADTHING_SECRET
+});

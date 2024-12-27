@@ -86,7 +86,7 @@ export function FilterSheet() {
                       className: 'w-full',
                     })}
                   >
-                    Xem giỏ hàng của bạn
+                    See you cart
                   </Link>
                 </SheetTrigger>
               </SheetFooter>

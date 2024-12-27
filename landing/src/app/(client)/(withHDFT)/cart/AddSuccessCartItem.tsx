@@ -7,7 +7,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 // import { currencyFormat, parseJSON } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
@@ -54,7 +54,7 @@ const AddSuccessCartItem = () => {
         font-medium"
               >
                 {/* {data.name} */}
-                Tên sản phẩm
+                Product Name
               </span>
               <span
                 className="text-black text-sm

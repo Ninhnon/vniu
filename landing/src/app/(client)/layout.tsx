@@ -1,3 +1,4 @@
+import Chatbot from '@/components/Chatbot';
 import { getSession } from '@/lib/auth';
 
 export default async function Layout({
@@ -10,6 +11,8 @@ export default async function Layout({
     <div className="w-full h-full">
       {/* <Header session={session} /> */}
       {children}
+      <Chatbot />
+
       {/* <Footer /> */}
     </div>
   );

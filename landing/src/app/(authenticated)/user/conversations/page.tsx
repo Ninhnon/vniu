@@ -1,18 +1,30 @@
-'use client';
+import Header from './components/Header';
+import dynamic from 'next/dynamic';
+import { getSession } from 'next-auth/react';
+const Body = dynamic(() => import('./components/Body'));
 
-import clsx from 'clsx';
+const ChatId = async () => {
+  const session = await getSession();
+  // const conversation = await getConversationById(session?.data?.user?.id);
 
-import useConversation from '@hooks/useConversation';
-import EmptyState from '@components/EmptyState';
-
-const Home = () => {
-  const { isOpen } = useConversation();
+  // if (!conversation) {
+  //   return (
+  //     <div className="lg:pl-80 h-full">
+  //       <div className="h-full flex flex-col">
+  //         <EmptyState />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
-    <div className={clsx(' h-full lg:block', isOpen ? 'block' : 'hidden')}>
-      <EmptyState />
+    <div className="w-full h-full">
+      <div className="h-full flex flex-col">
+        <Header />
+        <Body session={session} />
+      </div>
     </div>
   );
 };
 
-export default Home;
+export default ChatId;

@@ -69,19 +69,12 @@ const ChatScreen = () => {
     const connect = new HubConnectionBuilder()
       .configureLogging(LogLevel.Debug)
       .withUrl(`http://10.0.2.2:5000/chathub`, {
-        // .withUrl('https://vniuapi20240429122410.azurewebsites.net/chathub', {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets
       })
       .withAutomaticReconnect()
       .build()
     setConnection(connect)
-
-    // return () => {
-    //   if (connect) {
-    //     connect.stop().catch((error) => console.log('Error stopping connection:', error))
-    //   }
-    // }
   }, [])
 
   useEffect(() => {
@@ -104,20 +97,12 @@ const ChatScreen = () => {
               }
             ]
             console.log('message', message)
-            // setMessages((prevMessages) => [...prevMessages, messageCustom])
             setMessages((prevMessage) => GiftedChat.append(prevMessage, messageCustom))
           })
 
-          // connection.off('ReceiveMessage')
         })
         .catch((error) => console.log(error))
     }
-    // return () => {
-    //   if (connection) {
-    //     connection.off('ReceiveMessage')
-    //     connection.stop().catch((error) => console.log('Error stopping connection:', error))
-    //   }
-    // }
   }, [connection, userId])
 
   const onSend = useCallback((messages: IMessage[]) => {

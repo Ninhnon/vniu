@@ -25,43 +25,44 @@ import {
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-//quan ly form: react-hook-form
-//validate form: zod
+// Form management: react-hook-form
+// Form validation: zod
 
 const formSchema = z
   .object({
     name: z.string().min(1, {
-      message: 'Yêu cầu nhập tên',
+      message: 'Name is required',
     }),
     password: z
       .string()
       .min(1, {
-        message: 'Yêu cầu nhập mật khẩu',
+        message: 'Password is required',
       })
-      .min(8, { message: 'Mật khẩu phải chứa ít nhất 8 ký tự' })
+      .min(8, { message: 'Password must be at least 8 characters' })
       .regex(regexPasswordSpecial, {
-        message: 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt',
+        message: 'Password must contain at least 1 special character',
       })
       .regex(regexPasswordNumber, {
-        message: 'Mật khẩu phải chứa ít nhất 1 ký tự số',
+        message: 'Password must contain at least 1 number',
       })
       .regex(regexPasswordUpperCase, {
-        message: 'Mật khẩu phải chứa ít nhất 1 ký tự viết hoa',
+        message: 'Password must contain at least 1 uppercase letter',
       }),
     email: z
       .string()
       .min(1, {
-        message: 'Yêu cầu nhập email',
+        message: 'Email is required',
       })
-      .email({ message: 'Email không hợp lệ' }),
+      .email({ message: 'Invalid email address' }),
     confirmPassword: z.string().min(1, {
-      message: 'Yêu cầu xác nhận mật khẩu',
+      message: 'Confirm password is required',
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Mật khẩu xác nhận không trùng khớp',
+    message: 'Passwords do not match',
     path: ['confirmPassword'],
   });
+
 const Register = ({
   className,
   payload,
@@ -83,7 +84,7 @@ const Register = ({
   useEffect(() => {
     if (payload?.email && payload?.name) {
       toast.error(
-        'Tài khoản của bạn chưa được đăng ký. Vui lòng đăng ký để tiếp tục!'
+        'Your account is not registered. Please register to continue!'
       );
     }
   }, []);
@@ -126,7 +127,7 @@ const Register = ({
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="Nhập email"
+                            placeholder="Enter email"
                             autoComplete="username"
                             {...field}
                           />
@@ -137,7 +138,7 @@ const Register = ({
                   />
                 </div>
                 <div className="flex flex-col gap-3 ">
-                  <Label>Tên người dùng</Label>
+                  <Label>Username</Label>
                   <FormField
                     control={form.control}
                     name="name"
@@ -146,7 +147,7 @@ const Register = ({
                         <FormControl>
                           <Input
                             type="text"
-                            placeholder="Nhập tên người dùng"
+                            placeholder="Enter username"
                             {...field}
                           />
                         </FormControl>
@@ -156,7 +157,7 @@ const Register = ({
                   />
                 </div>
                 <div className="flex flex-col gap-3 ">
-                  <Label>Mật khẩu</Label>
+                  <Label>Password</Label>
                   <FormField
                     control={form.control}
                     name="password"
@@ -165,7 +166,7 @@ const Register = ({
                         <FormItem>
                           <FormControl>
                             <Input
-                              placeholder="Nhập mật khẩu"
+                              placeholder="Enter password"
                               type={show.password ? 'text' : 'password'}
                               value={field.value}
                               onChange={field.onChange}
@@ -195,7 +196,7 @@ const Register = ({
                   />
                 </div>
                 <div className="flex flex-col gap-3 ">
-                  <Label>Xác nhận mật khẩu</Label>
+                  <Label>Confirm Password</Label>
                   <FormField
                     control={form.control}
                     name="confirmPassword"
@@ -204,7 +205,7 @@ const Register = ({
                         <FormItem>
                           <FormControl>
                             <Input
-                              placeholder="Nhập lại mật khẩu"
+                              placeholder="Confirm password"
                               type={show.confirmPassword ? 'text' : 'password'}
                               value={field.value}
                               onChange={field.onChange}
@@ -236,16 +237,16 @@ const Register = ({
               </div>
 
               <Button type="submit" className="">
-                Đăng ký
+                Register
               </Button>
             </div>
           </form>
         </Form>
       </div>
       <p className=" mt-10 text-center text-sm text-muted-foreground">
-        Đã có tài khoản?{' '}
+        Already have an account?{' '}
         <Link className=" font-bold underline text-black" href="/auth/login">
-          Đăng nhập
+          Login
         </Link>
       </p>
     </div>

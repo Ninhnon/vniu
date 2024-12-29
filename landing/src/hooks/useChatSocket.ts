@@ -41,7 +41,7 @@ export const useChatSocket = ({
       {
         // withCredentials: true,
         query: {
-          userId: session.user.id,
+          userId: session?.data?.user.id,
           conversationId,
         },
       }

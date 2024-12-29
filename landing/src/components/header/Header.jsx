@@ -226,11 +226,11 @@ const NavigationMenuDemo = ({ session }) => {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   {' '}
-                  <Link href={'/user/profile'}>Hồ sơ</Link>
+                  <Link href={'/user/profile'}>Profile</Link>
                 </DropdownMenuItem>
                 {/* <DropdownMenuItem>
                   <Link href={'/admin/add-product'}>Thêm sản phẩm</Link>
@@ -246,7 +246,7 @@ const NavigationMenuDemo = ({ session }) => {
                   className="border-solid border-t-2 mt-2  gap-2"
                 >
                   <div className="">{AuthSvg.signIn()}</div>
-                  Đăng xuất
+                  Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -254,7 +254,7 @@ const NavigationMenuDemo = ({ session }) => {
         ) : (
           <div className="flex space-x-4 items-center">
             <Button className="w-[100px] h-8">
-              <Link href={'/auth/login'}>Đăng nhập</Link>
+              <Link href={'/auth/login'}>Login</Link>
             </Button>
             <CartSheet />
           </div>

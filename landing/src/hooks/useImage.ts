@@ -7,18 +7,20 @@ export const useImage = () => {
   const onUploadImage = async ({ formData, callback }) => {
     try {
       const res = await postRequest({
-        endPoint: '/api/image/upload',
+        endPoint: '/api/v1/file-storages/upload',
         formData,
         isFormData: true,
       });
-      if (res?.status === 200 || res?.message === 'create success') {
+      console.log('🚀 ~ onUploadImage ~ response:', res);
+
+      if (res?.isSuccess) {
         console.log(
           '🚀 ~ file: useProduct.ts:49 ~ onCreateProduct ~ res:',
           res.data
         );
         toast.success('Image successfully');
         callback();
-        return res.data;
+        return res.value;
       } else {
         toast.error('Image fail');
         return;

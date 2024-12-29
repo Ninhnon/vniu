@@ -64,16 +64,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ session }) => {
     <>
       <aside
         className={clsx(
-          `
-
-        pb-20
-        lg:pb-0 
-        lg:block
-        overflow-y-auto 
-        lg:w-[20%]
-        border-r 
-        border-gray-200 
-      `,
+          `pb-20 lg:pb-0 lg:block overflow-y-auto lg:w-[20%]border-r border-gray-200`,
           isOpen ? 'hidden' : 'block lg:w-[20%] left-0'
         )}
       >

@@ -1,15 +1,13 @@
 'use client';
 
 import clsx from 'clsx';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import { useState } from 'react';
 import { format, isToday } from 'date-fns';
 import { useSession } from 'next-auth/react';
 
 import Avatar1 from '@/components/Avatar';
 import ImageModal from './ImageModal';
-import { getRequest } from '@/lib/fetch';
-import { useQuery } from '@tanstack/react-query';
 
 // interface MessageBoxProps {
 //   data: DirectMessage;
@@ -21,10 +19,10 @@ const MessageBox: React.FC = ({ data, isLast }) => {
   const [imageModalOpen, setImageModalOpen] = useState(false);
 
   const isOwn = session.data?.user?.id === data?.userId;
-  const seenList = (data.seen || [])
-    .filter((user) => user.email !== data?.sender?.email)
-    .map((user) => user.name)
-    .join(', ');
+  // const seenList = (data.seen || [])
+  //   .filter((user) => user.email !== data?.sender?.email)
+  //   .map((user) => user.name)
+  //   .join(', ');
 
   const container = clsx('flex gap-3 p-4', isOwn && 'justify-end');
   const avatar = clsx(isOwn && 'order-2');
@@ -32,44 +30,25 @@ const MessageBox: React.FC = ({ data, isLast }) => {
   const message = clsx(
     'text-sm w-fit overflow-hidden',
     isOwn ? 'bg-sky-500 text-white' : 'bg-gray-100',
-    data.fileUrl ? 'rounded-md p-0' : 'rounded-full py-2 px-3'
+    data.imageUrl ? 'rounded-md p-0' : 'rounded-full py-2 px-3'
   );
-  const { data: userDetail }: any = useQuery({
-    queryKey: ['detail', data.userId],
-    queryFn: async () => {
-      const res = await getRequest({
-        endPoint: `/api/user?userId=${data.userId}`,
-      });
-
-      return res;
-      console.log('🚀 ~ file: MessageBox.tsx:46 ~ queryFn: ~ res:', res);
-    },
-    staleTime: 60000,
-    enabled: !!data.userId,
-  });
   const messageDate = new Date(data.createdAt);
-  // const { onGetUserDetail } = useUser();
-  // useEffect(() => {
-  //   async function getData() {
-  //     const response = await onGetUserDetail(data.userId);
-  //     const userData: User = userDetail; // specify the type of the response data
-  //     setOtherUser(userData);
-  //   }
-  //   getData();
-  // }, []);
   return (
     <div className={container}>
       {!isOwn && (
         <div className={avatar}>
-          <Avatar1 user={userDetail} />
+          <Avatar1
+            avatarUrl={
+              data?.avatarUrl ||
+              'https://res.cloudinary.com/dldksrtdf/image/upload/v1735279420/16.vniu_logo_mwstvq.png'
+            }
+          />
         </div>
       )}
 
       <div className={body}>
         <div className="flex items-center gap-1">
-          <div className="text-sm text-gray-500">
-            {isOwn ? 'You' : userDetail?.name}
-          </div>
+          <div className="text-sm text-gray-500">{isOwn ? 'You' : 'Admin'}</div>
           <div className="text-xs text-gray-400">
             {
               isToday(messageDate)
@@ -84,36 +63,25 @@ const MessageBox: React.FC = ({ data, isLast }) => {
             isOpen={imageModalOpen}
             onClose={() => setImageModalOpen(false)}
           />
-          {data.fileUrl ? (
+          {data.imageUrl ? (
             <Image
               alt="Image"
               height="288"
               width="288"
               onClick={() => setImageModalOpen(true)}
-              src={data.fileUrl}
-              className="
-                object-cover 
-                cursor-pointer 
-                hover:scale-110 
-                transition 
-                translate
-              "
+              src={data.imageUrl}
+              className="object-cover cursor-pointer hover:scale-110 transition translate"
+              priority={true}
             />
           ) : (
             <div>{data.content}</div>
           )}
         </div>
-        {isLast && isOwn && seenList.length > 0 && (
-          <div
-            className="
-            text-xs 
-            font-light 
-            text-gray-500
-            "
-          >
+        {/* {isLast && isOwn && seenList.length > 0 && (
+          <div className=" text-xs  font-light  text-gray-500 ">
             {`Seen by ${seenList}`}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

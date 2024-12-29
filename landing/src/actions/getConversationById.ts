@@ -1,25 +1,13 @@
-import getCurrentUser from './getCurrentUser';
+import { getRequest } from '@/lib/fetch';
 
-const getConversationById = async (conversationId: string) => {
+const getConversationById = async (id: string) => {
   try {
-    const currentUser = await getCurrentUser();
-
-    if (!currentUser?.email) {
-      return null;
-    }
-    const conversation = {};
-
-    // const conversation = await prisma.conversation.findUnique({
-    //   where: {
-    //     id: conversationId
-    //   },
-    //   include: {
-    //     userOne: true,
-    //     userTwo: true,
-    //   }
-    // });
-
-    return conversation;
+    const response = await getRequest({
+      endPoint: `/api/v1/users/${id}/cart-items/filter-and-sort/PageIndex=1&PageSize=2`,
+    });
+    console.log('🚀 ~ ChatId ~ response:', response);
+    if (response.isSuccess) return response.value.item;
+    else return null;
   } catch (error: any) {
     return null;
   }

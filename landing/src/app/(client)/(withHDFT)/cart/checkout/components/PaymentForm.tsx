@@ -82,7 +82,7 @@ export const PaymentForm = ({
                 console.log('Cash on Delivery');
               }}
             >
-              Cash on Delivery{' '}
+              Cash on Delivery
             </Button>
           )}
           {method === 'Paypal' && (

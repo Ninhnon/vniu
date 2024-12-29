@@ -141,7 +141,6 @@ export function ImageDialog<TFieldValues extends FieldValues>({
 
         {(files && files?.length < maxFiles) || !files ? (
           <div>
-            {' '}
             <div
               {...getRootProps()}
               className={cn(

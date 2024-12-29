@@ -229,7 +229,6 @@ const NavigationMenuDemo = ({ session }) => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  {' '}
                   <Link href={'/user/profile'}>Profile</Link>
                 </DropdownMenuItem>
                 {/* <DropdownMenuItem>

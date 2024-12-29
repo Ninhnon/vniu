@@ -1,7 +1,7 @@
 'use client';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { parseJSON } from '@/lib/utils';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Zoom } from './ui/zoom-image';
 
@@ -60,7 +60,6 @@ const ReviewDetail = ({ data }) => {
         </span>
       </div>
       <div className="flex gap-4 mb-0.5">
-        {' '}
         {starArray.map((item) => {
           return (
             <div key={starArray.indexOf(item)}>

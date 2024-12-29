@@ -132,7 +132,7 @@ export function FileDialog<TFieldValues extends FieldValues>({
 
         {(files && files?.length < maxFiles) || !files ? (
           <div>
-            {' '}
+            
             <div
               {...getRootProps()}
               className={cn(
@@ -293,7 +293,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
             </DialogTrigger>
             <DialogContent>
               <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
-                Crop image{' '}
+                Crop image
               </p>
               <div className="mt-8 grid place-items-center space-y-5">
                 <Cropper
@@ -324,7 +324,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                     }}
                   >
                     <Icons.crop className="mr-2 h-3.5 w-3.5 text-secondary-50" />
-                    Crop image{' '}
+                    Crop image
                   </Button>
                   <Button
                     aria-label="Reset crop"
@@ -341,7 +341,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                       className="mr-2 h-3.5 w-3.5 text-primary"
                       aria-hidden="true"
                     />
-                    Discard changes{' '}
+                    Discard changes
                   </Button>
                 </div>
               </div>

@@ -132,7 +132,7 @@ export const Web3Checkout = () => {
               }
             }}
           >
-            Switch Chain{' '}
+            Switch Chain
           </Button>
           {/* <Button
             onClick={() => {

@@ -187,7 +187,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
           >
             <div>
               <Icons.gitHub className="mr-2 h-4 w-4" />
-            </div>{' '}
+            </div>
             Github
           </Button>
           <Button
@@ -200,7 +200,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
           >
             <div>
               <Icons.discord className="mr-2 h-4 w-4" />
-            </div>{' '}
+            </div>
             Discord
           </Button>
           <Button
@@ -213,14 +213,14 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
           >
             <div>
               <Icons.google className="mr-2 h-4 w-4" />
-            </div>{' '}
+            </div>
             Google
           </Button>
         </div>
       </div>
 
       <p className="mt-10 px-8 text-center text-sm text-muted-foreground">
-        Don't have an account?{' '}
+        Don't have an account?
         <Link className="font-bold underline text-black" href="/auth/register">
           Register
         </Link>

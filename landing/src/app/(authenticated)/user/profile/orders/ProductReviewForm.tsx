@@ -13,14 +13,15 @@ import { useSession } from 'next-auth/react';
 import { useReview } from '@/hooks/useReview';
 import { useRouter } from 'next/navigation';
 import DialogCustom from '@/components/ui/dialogCustom';
+import { useQueryClient } from '@tanstack/react-query';
 
 type FileWithPreview = FileWithPath & {
   preview: string;
 };
-const ProductReviewForm = ({ product, reviewItemRefetch }) => {
+const ProductReviewForm = ({ product }) => {
   //Router for redirecting
   const router = useRouter();
-
+  const queryClient = useQueryClient();
   //POST hook
   const { onPostProductReview } = useReview();
   const [files, setFiles] = useState<FileWithPreview[]>([]);
@@ -77,10 +78,10 @@ const ProductReviewForm = ({ product, reviewItemRefetch }) => {
       files: [...files],
       userId: userId,
       productId: product.id,
-      reviewDate: new Date(),
+      orderedLineId: product.orderLines[0].id,
     });
 
-    if (ret) {
+    if (ret.isSuccess) {
       console.log(ret);
       // Set loading state to false and show success dialog
       setIsLoading(false);
@@ -97,7 +98,7 @@ const ProductReviewForm = ({ product, reviewItemRefetch }) => {
         setShowSuccess(false);
         setIsInvalid(false);
       }, 2000);
-      reviewItemRefetch();
+      queryClient.refetchQueries(['productReview', product.id, 1]);
     }
   };
   return (
@@ -118,7 +119,7 @@ const ProductReviewForm = ({ product, reviewItemRefetch }) => {
             getSession();
           }}
         >
-          Write a Product Review
+          Review
         </Button>
       </div>
       {/* Check condition to open dialog */}
@@ -148,14 +149,14 @@ const ProductReviewForm = ({ product, reviewItemRefetch }) => {
               </span>
               <div className="w-full h-fit mt-2 flex flex-row gap-3 items-center">
                 <Image
-                  src={product?.productImages[0].imageUrl}
-                  alt={product.name}
+                  src={product?.orderLines[0].imageUrl}
+                  alt={'image'}
                   width={60}
                   height={50}
                   className="rounded-md object-cover object-center"
                 />
                 <span className="text-[10px] sm:text-sm text-gray-700">
-                  {product.name}
+                  {product?.orderLines[0].productName}
                 </span>
               </div>
             </div>

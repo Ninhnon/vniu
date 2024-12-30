@@ -1,6 +1,7 @@
 import { Image } from '@nextui-org/react';
 
 const OrderItem = ({ order }) => {
+  console.log('🚀 ~ OrderItem ~ order:', order);
   return (
     <div className="w-60 h-48 flex flex-col justify-between gap-3 border-1 rounded-md p-3 m-2">
       <div className="w-full h-[80%] flex flex-row justify-between gap-3">

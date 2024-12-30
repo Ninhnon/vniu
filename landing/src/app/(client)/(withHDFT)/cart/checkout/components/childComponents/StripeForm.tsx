@@ -62,12 +62,13 @@ const StripeForm = ({
       isFormData: false,
     });
     console.log('🚀 ~ onSubmit ~ response:', response);
-
     setLoading(false);
+
     if (error) {
       toast.error(error?.message);
     } else if (paymentIntent.status === 'succeeded') {
       toast.success('Payment successful');
+      setLoading(false);
       router.push('/user/profile/orders');
     } else {
       toast.error('Payment failed');

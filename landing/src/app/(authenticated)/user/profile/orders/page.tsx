@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import { OrderDetail } from './OrderDetail';
+import ProductReviewForm from './ProductReviewForm';
 
 const page = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,6 +20,7 @@ const page = () => {
   const { data: orders, isLoading } = useQuery({
     queryKey: ['orders', session?.data?.user?.id],
     queryFn: async () => {
+      if (!session?.data?.user?.id) return [];
       const res = await postRequest({
         endPoint: `/api/v1/users/${
           session?.data?.user?.id
@@ -35,7 +37,6 @@ const page = () => {
     // refetchInterval: 1000,
     keepPreviousData: true,
   });
-  console.log('🚀 ~ page ~ orders:', orders);
   useEffect(() => {
     if (!isLoading) {
       setTotalPages(1);
@@ -58,7 +59,7 @@ const page = () => {
     <div className="flex flex-col px-10 gap-y-5 py-10">
       {orders?.map((item) => {
         return (
-          <div className="flex flex-row gap-x-10 ">
+          <div className="flex flex-row gap-x-10" key={item?.id}>
             <Zoom>
               <img
                 width={200}
@@ -72,6 +73,9 @@ const page = () => {
               <div>Status : {'pending'}</div>
 
               <OrderDetail data={item} />
+              <div className="container w-full">
+                <ProductReviewForm product={item} />
+              </div>
             </div>
           </div>
         );

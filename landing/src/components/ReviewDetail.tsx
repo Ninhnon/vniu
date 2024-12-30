@@ -44,57 +44,57 @@ const ReviewDetail = ({ data }) => {
   //console.log(' ==> ' + JSON.parse(data.images));
   //Create star array
   const starArray = Array.from(
-    { length: data.rating },
+    { length: data?.ratingValue },
     (_, index) => index + 1
   );
   const blankStarArray = Array.from(
-    { length: 5 - data.rating },
+    { length: 5 - data?.ratingValue },
     (_, index) => index + 1
   );
   return (
     <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border-b-2 border-x-zinc-900 px-5 py-6">
       <div className="flex flex-col sm:flex-row relative sm:items-center">
-        <span className="font-bold text-sm md:text-xl">{data.title}</span>
+        {/* <span className="font-bold text-sm md:text-xl">{data?.comment}</span> */}
         <span className="sm:ml-auto font-extralight text-[11px] md:text-sm xs:mt-1 mt-2 text-neutral-500">
-          {new Date(data.reviewDate).toLocaleString()}
+          {new Date(data?.createdDate).toLocaleString()}
         </span>
       </div>
       <div className="flex gap-4 mb-0.5">
-        {starArray.map((item) => {
+        {starArray.map((item, index) => {
           return (
-            <div key={starArray.indexOf(item)}>
-              {' '}
+            <div key={`star-${index}-${Math.random()}`}>
               {CommonSvg.startFilled('black', 5, 5)}
             </div>
           );
         })}
-        {blankStarArray.map((item) => {
+        {blankStarArray.map((item, index) => {
           return (
-            <div key={starArray.indexOf(item)}>
-              {' '}
+            <div key={`blank-star-${index}-${Math.random()}`}>
               {CommonSvg.startFilled('gray', 5, 5)}
             </div>
           );
         })}
       </div>
       <span className="font-semibold text-sm md:text-lg">
-        {data.user ? data.user.name : 'Anonymous'}
+        {data?.user ? data.user.userName : 'Anonymous'}
       </span>
 
       <div className="flex flex-row w-full h-fill gap-[10px]">
-        {parseJSON(data.images).map((item, index) => (
-          <div key={`${item.id}-${index}`}>
-            <Zoom>
-              <Image
-                src={item.url}
-                alt={item.name}
-                className="h-12 sm:h-16 w-12 sm:w-16 shrink-0 rounded-md object-cover object-center"
-                width={500}
-                height={500}
-              />
-            </Zoom>
-          </div>
-        ))}
+        {data?.reviewImages &&
+          data?.reviewImages?.map((item, index) => (
+            <div key={`${item.id}-${index}`}>
+              <Zoom>
+                <Image
+                  src={item.imageUrl}
+                  alt={item.name}
+                  className="h-12 sm:h-16 w-12 sm:w-16 shrink-0 rounded-md object-cover object-center"
+                  width={500}
+                  height={500}
+                  priority={true}
+                />
+              </Zoom>
+            </div>
+          ))}
       </div>
 
       <div>
@@ -104,7 +104,7 @@ const ReviewDetail = ({ data }) => {
             !isShowingMore && 'text-sm md:text-lg line-clamp-3'
           }`}
         >
-          {data.text}
+          {data?.comment}
         </p>
         {isTruncated && (
           <button

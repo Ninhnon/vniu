@@ -3,23 +3,45 @@ import { CommonSvg } from '@/assets/CommonSvg';
 import { Skeleton } from '@/components/ui/skeleton';
 import React from 'react';
 
-const ProductreviewRatingData = ({ reviewRatingData }) => {
+const ProductReviewRatingData = ({ reviewRatingData }) => {
   const averageRating = () => {
     if (reviewRatingData) {
-      const totalStar =
-        reviewRatingData?.totalFiveStar * 5 +
-        reviewRatingData?.totalFourStar * 4 +
-        reviewRatingData?.totalThreeStar * 3 +
-        reviewRatingData?.totalTwoStar * 2 +
-        reviewRatingData?.totalOneStar;
-      return (totalStar / reviewRatingData?.totalReview).toFixed(1);
+      const totalStar = reviewRatingData
+        .map((item) => item.ratingValue)
+        .reduce((a, b) => a + b, 0);
+      return parseFloat((totalStar / reviewRatingData.length).toFixed(1));
+    }
+  };
+  const numberStarFive = () => {
+    if (reviewRatingData) {
+      return reviewRatingData.filter((item) => item.ratingValue === 5).length;
+    }
+  };
+  const numberStarFour = () => {
+    if (reviewRatingData) {
+      return reviewRatingData.filter((item) => item.ratingValue === 4).length;
+    }
+  };
+  const numberStarThree = () => {
+    if (reviewRatingData) {
+      return reviewRatingData.filter((item) => item.ratingValue === 3).length;
+    }
+  };
+  const numberStarTwo = () => {
+    if (reviewRatingData) {
+      return reviewRatingData.filter((item) => item.ratingValue === 2).length;
+    }
+  };
+  const numberStarOne = () => {
+    if (reviewRatingData) {
+      return reviewRatingData.filter((item) => item.ratingValue === 1).length;
     }
   };
 
   const fiveStarPercentage = () => {
     if (reviewRatingData) {
       const percentage = (
-        (reviewRatingData.totalFiveStar / reviewRatingData.totalReview) *
+        (numberStarFive() / reviewRatingData.length) *
         100
       ).toFixed(1);
       return `${percentage}%`;
@@ -28,7 +50,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
   const fourStarPercentage = () => {
     if (reviewRatingData) {
       const percentage = (
-        (reviewRatingData.totalFourStar / reviewRatingData.totalReview) *
+        (numberStarFour() / reviewRatingData.length) *
         100
       ).toFixed(1);
       return `${percentage}%`;
@@ -37,7 +59,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
   const threeStarPercentage = () => {
     if (reviewRatingData) {
       const percentage = (
-        (reviewRatingData.totalThreeStar / reviewRatingData.totalReview) *
+        (numberStarThree() / reviewRatingData.length) *
         100
       ).toFixed(1);
       return `${percentage}%`;
@@ -46,7 +68,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
   const twoStarPercentage = () => {
     if (reviewRatingData) {
       const percentage = (
-        (reviewRatingData.totalTwoStar / reviewRatingData.totalReview) *
+        (numberStarTwo() / reviewRatingData.length) *
         100
       ).toFixed(1);
       return `${percentage}%`;
@@ -55,7 +77,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
   const oneStarPercentage = () => {
     if (reviewRatingData) {
       const percentage = (
-        (reviewRatingData.totalOneStar / reviewRatingData.totalReview) *
+        (numberStarOne() / reviewRatingData.length) *
         100
       ).toFixed(1);
       return `${percentage}%`;
@@ -63,11 +85,11 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
   };
 
   const starArray = Array.from(
-    { length: Math.round(averageRating() as number) },
+    { length: Math.round(averageRating() || 0) },
     (_, index) => index + 1
   );
   const blankStarArray = Array.from(
-    { length: 5 - Math.round(averageRating() as number) },
+    { length: 5 - Math.round(averageRating() || 0) },
     (_, index) => index + 1
   );
 
@@ -84,7 +106,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     <div className="flex flex-row p-1 w-full gap-4 items-center justify-center">
                       {starArray.map((item) => {
                         return (
-                          <div key={starArray.indexOf(item)}>
+                          <div key={`star-${starArray.indexOf(item)}`}>
                             {' '}
                             {CommonSvg.startFilled('yellow', 6, 6)}
                           </div>
@@ -92,7 +114,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                       })}
                       {blankStarArray.map((item) => {
                         return (
-                          <div key={starArray.indexOf(item)}>
+                          <div key={`blank-${blankStarArray.indexOf(item)}`}>
                             {' '}
                             {CommonSvg.startFilled('red', 6, 6)}
                           </div>
@@ -102,7 +124,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                   </div>
                   <div className="flex flex-row p-1 w-full items-center justify-center">
                     <div className="mx-1 mb-1">
-                      {[1].map((item) => {
+                      {[-1].map((item) => {
                         return (
                           <div key={item}>
                             {' '}
@@ -116,8 +138,8 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     </span>
                     <span className="inline-block text-2xl ml-8 font-semibold">
                       {`${
-                        reviewRatingData ? reviewRatingData?.totalReview : ''
-                      } Đánh Giá`}
+                        reviewRatingData ? reviewRatingData?.length : ''
+                      } Reviews`}
                     </span>
                   </div>
                   <div className="flex flex-row w-full justify-center items-center ">
@@ -129,7 +151,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
                           5 Star
                         </div>
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
                             <div
                               className={`h-4 bg-slate-800 border-1 rounded-xl`}
@@ -140,7 +162,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                           <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                         )}
 
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                             {fiveStarPercentage()}
                           </span>
@@ -157,7 +179,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
                           4 Star
                         </div>
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
                             <div
                               className={`h-4 bg-slate-800 border-1 rounded-xl`}
@@ -168,7 +190,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                           <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                         )}
 
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                             {fourStarPercentage()}
                           </span>
@@ -185,7 +207,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
                           3 Star
                         </div>
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
                             <div
                               className={`h-4 bg-slate-800 border-1 rounded-xl`}
@@ -196,7 +218,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                           <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                         )}
 
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                             {threeStarPercentage()}
                           </span>
@@ -213,7 +235,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
                           2 Star
                         </div>
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
                             <div
                               className={`h-4 bg-slate-800 border-1 rounded-xl`}
@@ -224,7 +246,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                           <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                         )}
 
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                             {twoStarPercentage()}
                           </span>
@@ -241,7 +263,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
                           1 Star
                         </div>
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
                             <div
                               className={`h-4 bg-slate-800 border-1 rounded-xl`}
@@ -252,7 +274,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                           <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                         )}
 
-                        {reviewRatingData?.totalReview ? (
+                        {reviewRatingData?.length ? (
                           <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                             {oneStarPercentage()}
                           </span>
@@ -267,7 +289,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                 </div>
               </Skeleton>
             </div>
-          ) : reviewRatingData?.totalReview == 0 ? (
+          ) : reviewRatingData?.length == 0 ? (
             // Case 2: reviewRatingData is not null, but totalReview is 0
             <div>
               <span className="text-2xl font-light"> No review!</span>
@@ -279,7 +301,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                 <div className="flex flex-row p-1 w-full gap-4 items-center justify-center">
                   {starArray.map((item) => {
                     return (
-                      <div key={starArray.indexOf(item)}>
+                      <div key={`star3-${starArray.indexOf(item)}`}>
                         {' '}
                         {CommonSvg.startFilled('black', 9, 9)}
                       </div>
@@ -287,7 +309,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                   })}
                   {blankStarArray.map((item) => {
                     return (
-                      <div key={starArray.indexOf(item)}>
+                      <div key={`blank3-${blankStarArray.indexOf(item)}`}>
                         {' '}
                         {CommonSvg.startFilled('gray', 9, 9)}
                       </div>
@@ -297,7 +319,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
               </div>
               <div className="flex flex-row p-1 w-full items-center justify-center">
                 <div className="mx-1 mb-1">
-                  {[1].map((item) => {
+                  {[-2].map((item) => {
                     return (
                       <div key={item}>
                         {' '}
@@ -310,7 +332,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                   {averageRating()}
                 </span>
                 <span className="inline-block text-2xl ml-8 font-semibold">
-                  {`${reviewRatingData?.totalReview} Đánh Giá`}
+                  {`${reviewRatingData?.length} Reviews`}
                 </span>
               </div>
               <div className="flex flex-row w-full p-8 md:ml-4 mr-4 xs:mr-0">
@@ -322,7 +344,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
                       5 Star
                     </div>
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
                         <div
                           className={`h-4 bg-slate-800 rounded-xl`}
@@ -333,7 +355,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                       <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                     )}
 
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                         {fiveStarPercentage()}
                       </span>
@@ -351,7 +373,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
                       4 Star
                     </div>
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
                         <div
                           className={`h-4 bg-slate-800 rounded-xl`}
@@ -362,7 +384,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                       <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                     )}
 
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                         {fourStarPercentage()}
                       </span>
@@ -379,7 +401,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
                       3 Star
                     </div>
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
                         <div
                           className={`h-4 bg-slate-800 rounded-xl`}
@@ -390,7 +412,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                       <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                     )}
 
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                         {threeStarPercentage()}
                       </span>
@@ -407,7 +429,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
                       2 Star
                     </div>
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
                         <div
                           className={`h-4 bg-slate-800 rounded-xl`}
@@ -418,7 +440,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                       <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                     )}
 
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-[12px] sm:text-sm pl-1 text-center">
                         {twoStarPercentage()}
                       </span>
@@ -435,7 +457,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
                       1 Star
                     </div>
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
                         <div
                           className={`h-4 bg-slate-800 rounded-xl`}
@@ -446,7 +468,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                       <Skeleton className="h-4 xl:w-[75%] md:w-[60%] w-[50%]" />
                     )}
 
-                    {reviewRatingData?.totalReview ? (
+                    {reviewRatingData?.length ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-[11px] sm:text-sm pl-1 text-center">
                         {oneStarPercentage()}
                       </span>
@@ -466,4 +488,4 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
   );
 };
 
-export default ProductreviewRatingData;
+export default ProductReviewRatingData;

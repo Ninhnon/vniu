@@ -16,8 +16,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 
 export const OrderDetail = ({ data }: { data: any }) => {
-  console.log('🚀 ~ file: OrderDetail.tsx:29 ~ data:', data);
-
   return (
     <Dialog>
       <DialogTrigger asChild>

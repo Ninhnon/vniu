@@ -66,9 +66,9 @@ function page({ params }: { params: Promise<{ slug: string }> }) {
             />
           </div>
         </div>
-        {/* <div>
+        <div>
           <ProductReview product={data} />
-        </div> */}
+        </div>
         {/* <div>
           <ProductUserMayLike data={data} />
         </div> */}

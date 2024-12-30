@@ -23,20 +23,20 @@ const ProductReviewItem = ({
       <div className="z-40 space-y-2 pt-4 flex flex-col items-center">
         <div className="flex flex-col w-full gap-y-3 items-center">
           {isFetched
-            ? reviewItemData?.data?.map((item) => (
-                <div className="p-1 w-full" key={item.id}>
+            ? reviewItemData?.map((item, index) => (
+                <div className="p-1 w-full" key={`review-${index}`}>
                   <ReviewDetail data={item} />
                 </div>
               ))
             : [1, 2, 3].map((item) => (
-                <div className="p-1 w-full" key={item}>
+                <div className="p-1 w-full" key={`skeleton-${item}`}>
                   <Skeleton className="rounded" disableAnimation>
                     <ReviewDetail data={{ title: 'ABCDEF' }} />
                   </Skeleton>
                 </div>
               ))}
         </div>
-        {reviewItemData ? (
+        {/* {reviewItemData ? (
           <div></div>
         ) : (
           <Pagination
@@ -48,7 +48,7 @@ const ProductReviewItem = ({
             }}
             page={currentPage}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

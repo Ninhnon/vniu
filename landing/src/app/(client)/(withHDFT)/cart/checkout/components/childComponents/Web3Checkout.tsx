@@ -134,22 +134,6 @@ export const Web3Checkout = () => {
           >
             Switch Chain
           </Button>
-          {/* <Button
-            onClick={() => {
-              window.ethereum?.request({
-                method: 'wallet_watchAsset',
-                params: {
-                  type: 'ERC20',
-                  options: {
-                    address: tokenAddress,
-                    symbol: 'UIT',
-                    decimals: 18,
-                    image:
-                      'https://upload  <>
-            }}
-          >
-            add
-          </Button> */}
         </div>
       )}
     </div>

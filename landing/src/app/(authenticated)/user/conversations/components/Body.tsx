@@ -49,9 +49,10 @@ const Body = ({ session }) => {
   const handleNewMessageChange = (e) => {
     setNewMessage(e.target.value);
   };
-  const { data: messagesData } = useQuery({
+  const { data: messagesData, refetch } = useQuery({
     queryKey: ['message', userId],
     queryFn: () => chatApi.getMessagesByUser(userId),
+    refetchInterval: 1000,
   });
 
   const sendMessageMutation = useMutation({
@@ -111,7 +112,7 @@ const Body = ({ session }) => {
         })
         .catch((error) => console.log(error));
     }
-  }, [connection, userId]);
+  }, [connection]);
 
   const handleSendMessage = async () => {
     if (!newMessage && imageFiles.length === 0) return;

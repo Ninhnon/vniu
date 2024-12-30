@@ -10,7 +10,7 @@ import axiosClient from '.././axios';
 const chatApi = {
   getMessagesByUser(userId: string) {
     return axiosClient.get<SuccessResponse<MessageResponseType[]>>(
-      `/api/v1/users/${userId}/chat-messages/filter-and-sort?PageIndex=1&PageSize=8`
+      `/api/v1/users/${userId}/chat-messages/filter-and-sort?PageIndex=1&PageSize=100`
     );
   },
 

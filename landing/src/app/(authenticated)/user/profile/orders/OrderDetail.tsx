@@ -11,7 +11,11 @@ import { Loader } from 'lucide-react';
 import { Image } from '@nextui-org/react';
 import DialogCustom from '@/components/ui/dialogCustom';
 import OrderItem from './OrderItem';
-import { DialogContent, DialogTrigger } from '@radix-ui/react-dialog';
+import {
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@radix-ui/react-dialog';
 import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 
@@ -22,6 +26,7 @@ export const OrderDetail = ({ data }: { data: any }) => {
         <Button>Details</Button>
       </DialogTrigger>
       <DialogContent>
+        <DialogTitle />
         <div className="w-full flex flex-col border-3 p-1 rounded-md">
           <div className="flex flex-row justify-center items-center text-lg font-bold">
             ORDER INFORMATION

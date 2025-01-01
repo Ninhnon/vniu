@@ -1,6 +1,6 @@
 import Loader from '@/components/Loader';
 import { Button } from '@/components/ui/button';
-import { postRequest } from '@/lib/fetch';
+import { deleteRequest, postRequest } from '@/lib/fetch';
 import {
   useStripe,
   useElements,
@@ -46,7 +46,12 @@ const StripeForm = ({
       };
     });
     console.log('🚀 ~ dataArray ~ dataArray:', dataArray);
-
+    const dataArrayDelete = dataArray.map((item) => {
+      return {
+        productItemId: item.productItemId,
+        variationId: item.variationId,
+      };
+    });
     const response = await postRequest({
       endPoint: '/api/v1/orders',
       formData: {
@@ -62,13 +67,21 @@ const StripeForm = ({
       isFormData: false,
     });
     console.log('🚀 ~ onSubmit ~ response:', response);
-    setLoading(false);
-
+    const responseDelete = await deleteRequest({
+      endPoint: '/api/v1/cart-items',
+      formData: dataArrayDelete,
+    });
+    console.log('🚀 ~ onSubmit ~ responseDelete:', responseDelete);
+    if (!response.isSuccess || !responseDelete.isSuccess) {
+      toast.error('Order failed');
+      setLoading(false);
+      return;
+    }
     if (error) {
       toast.error(error?.message);
     } else if (paymentIntent.status === 'succeeded') {
-      toast.success('Payment successful');
       setLoading(false);
+      toast.success('Payment successful');
       router.push('/user/profile/orders');
     } else {
       toast.error('Payment failed');

@@ -3,6 +3,7 @@
 /**
  * @type {import('next').NextConfig}
  **/
+const path = require("path");
 
 const nextConfig = {
     async headers() {
@@ -76,9 +77,13 @@ const nextConfig = {
         ],
     },
     webpack: config => {
+        config.experiments = { ...config.experiments, asyncWebAssembly: true, topLevelAwait: true };
         config.externals.push('pino-pretty', 'lokijs', 'encoding')
+        config.resolve.alias["deepar"] = path.resolve(__dirname, "node_modules/deepar");
         return config
     },
+    // Ensure static resources are served correctly
+    staticPageGenerationTimeout: 60,
 }
 
 module.exports = nextConfig

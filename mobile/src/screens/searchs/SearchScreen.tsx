@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, TextInput, FlatList, Image, TouchableOpacity, ScrollView, StyleSheet, Text } from 'react-native'
+import { View, TextInput, FlatList, Image, TouchableOpacity, ScrollView, StyleSheet, Text, SafeAreaView } from 'react-native'
 import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
 import { ENV } from '@configs/env'
@@ -7,6 +7,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useTheme } from '@react-navigation/native'
 import { IMAGES } from '@assets/images'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { Layout } from '@components/base'
+import SearchHeader from '@components/ui/search/SearchHeader'
+import { InvestSearchContextProvider } from 'src/contexts/investSearchContext'
+import { FormProvider, useForm } from 'react-hook-form'
+import { TInvestSearchForm } from '@appTypes/schemaType'
+import { Validators } from '@configs/validators'
+import {zodResolver} from '@hookform/resolvers/zod';
 
 const SearchScreen = () => {
   const { colors } = useTheme()
@@ -44,38 +51,42 @@ const SearchScreen = () => {
     setSearchQuery(text)
     searchproducts(text)
   }
-  const renderItem = ({ item }: { item: any }) => {
-    const productItem = item.productItems[0]
-    const productImageUrl = productItem?.productImage?.productImageUrl
-    const originalPrice = productItem?.originalPrice
-    const discount = 5
-    const rating = 5
-
-    return (
+  const renderItem = ({ item }: { item: any }) => (
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('Details', {
-            id: item.productId
+            id: item.id
           })
         }}
         style={styles.productContainer}
       >
-        <Image source={{ uri: productImageUrl }} style={styles.productImage} />
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: 'black' }}>{item.productName}</Text>
-        <Text style={{ fontSize: 14, marginTop: 4, color: 'black' }}>
-          ${originalPrice} <Text style={styles.discount}>-{discount}%</Text>
+        <Image source={{ uri: item[0].productImages[0].imageUrl }} style={styles.productImage} />
+        <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>{item[0].name}</Text>
+        <Text style={{ fontSize: 14, marginTop: 4, color: 'red' }}>
+          ${item[0].salePriceMin}
         </Text>
-        <View style={styles.ratingContainer}>
-          <MaterialCommunityIcons name='star' size={16} color='#333' />
-          <Text style={{ marginLeft: 4, fontWeight: 'bold', color: 'black' }}>{rating}</Text>
+        <View style={{ flexDirection: 'row', marginTop: 4, gap:4 }}>
+        <Text style={{ fontSize: 12, color: colors.text, backgroundColor:'#00DDD1', borderRadius: 4, padding: 2, paddingHorizontal: 4 }}>
+        {'-'}{(Math.round(item[0].originalPrice - item[0].salePriceMin) *100/item[0].originalPrice).toFixed(2)}{'%'}
+        </Text>
+        <Text style={{textDecorationLine: 'line-through', fontSize: 12, color: colors.text, padding: 2, paddingHorizontal: 4 }}>
+        ${item[0].originalPrice}
+        </Text>
         </View>
       </TouchableOpacity>
     )
-  }
-
+    const form = useForm<TInvestSearchForm>({
+      resolver: zodResolver(Validators.formInvestSearchSchema),
+    });
   return (
+    <InvestSearchContextProvider>
+
+    <FormProvider {...form}>
+    <SafeAreaView style={{ paddingTop: 24, backgroundColor: 'white', flex: 1 }}>
+
+    <SearchHeader />
     <ScrollView style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      {/* <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Image source={IMAGES.IMG_ICON_PREVIOUS} />
       </TouchableOpacity>
       <View style={styles.header}>
@@ -89,8 +100,8 @@ const SearchScreen = () => {
             hitSlop={{ top: 20, bottom: 20, left: 100, right: 50 }}
           />
         </View>
-      </View>
-      <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: wp(1) }}>
+      </View> */}
+      <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: wp(1), }}>
         <View>
           <FlatList
             numColumns={2}
@@ -102,24 +113,15 @@ const SearchScreen = () => {
         </View>
       </ScrollView>
     </ScrollView>
+    </SafeAreaView>
+    </FormProvider>
+    </InvestSearchContextProvider>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: '#fff'
-  },
-  backButton: {
-    position: 'absolute',
-    left: 30,
-    top: 50,
-    width: 30,
-    height: 30,
-    backgroundColor: '#E0E0E0',
-    padding: 8,
-    borderRadius: 4,
-    justifyContent: 'flex-start',
-    alignSelf: 'flex-start'
   },
   productListContainer: {
     flexGrow: 1,

@@ -154,7 +154,7 @@ const ProductReviewForm = ({ product, reviewItemRefetch }) => {
                   height={50}
                   className="rounded-md object-cover object-center"
                 />
-                <span className="text-[10px] sm:text-sm text-gray-700">
+                <span className="text-[10px] sm:text-sm text-gray-700 line-clamp-2">
                   {product.name}
                 </span>
               </div>

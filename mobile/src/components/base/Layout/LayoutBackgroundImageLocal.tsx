@@ -1,8 +1,9 @@
+import { IMAGES } from '@assets/images';
 import React, {useMemo} from 'react';
 
 import {ImageBackground, ImageResizeMode, ViewStyle} from 'react-native';
 
-import {IMAGES} from '@assets/Image';
+
 
 interface ILayoutBackgroundImageLocalProps {
   children?: React.ReactNode;

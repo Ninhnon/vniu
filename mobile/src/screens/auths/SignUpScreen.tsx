@@ -85,7 +85,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
     setLoading(true)
 
     try {
-      const response = await fetch(`${ENV.API_URL}/api/Auth/register`, {
+      const response = await fetch(`${ENV.API_URL}/api/v1/auths/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -94,22 +94,19 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
           userName: fullName,
           email: email,
           password: password,
-          phone: phoneNumber
+          lastName: fullName,
+          firstName:''
         })
       })
 
       const data = await response.json()
       console.log('🚀 ~ handleSubmitForm ~ data:', data)
 
-      if (data.message === 'Register Successfully') {
-        console.log('Sign up successful:', data.data)
-        setStorage('userName', data.data.userName)
-        setStorage('email', data.data.email)
-        setStorage('id', data.data.id)
+      if (data.isSuccess ) {
         Alert.alert('Register Success', 'Please input Login Form to Login')
         navigation.navigate('SignInScreen')
       } else {
-        Alert.alert('Register failed', data.title)
+        Alert.alert('Register failed')
       }
     } catch (error) {
       console.log('Register failed', error)
@@ -208,6 +205,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 15,
     textAlign: 'center',
+    color: '#1A94FF',
     marginBottom: 30
   },
   label: {

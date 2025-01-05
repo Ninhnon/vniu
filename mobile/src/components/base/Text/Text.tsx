@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 import { Text as RNText, ViewStyle } from 'react-native'
 
-import { FONTS_SIZE_HASH_MAP, FONTS_WEIGHT_HASH_MAP } from './constants'
+import { FONTS_SIZE_HASH_MAP } from './constants'
 import { TTextProps } from './type'
 import { COLORS } from '@assets/color'
 import { useTheme } from '@react-navigation/native'
@@ -25,7 +25,6 @@ const Text = ({
         color: COLORS[color],
         textAlign: center ? 'center' : 'auto',
         ...FONTS_SIZE_HASH_MAP[size],
-        ...FONTS_WEIGHT_HASH_MAP[weight]
       },
       style || {}
     ]

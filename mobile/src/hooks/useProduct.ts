@@ -1,4 +1,4 @@
-import { postRequest } from '@/lib/fetch';
+import { postRequest } from "@configs/fetch";
 
 export const useProduct = () => {
   const onGetProductDetail = async ({
@@ -37,15 +37,13 @@ export const useProduct = () => {
     colourIds: string | null;
     productItemIds?: string[] | null;
   }) => {
-    console.log('🚀 ~ useProduct ~ productItemIds:', productItemIds);
     const params = {
       PageIndex,
       SearchTerm,
-      price_range,
     };
 
     // Construct the base endpoint
-    let endpoint = '/api/v1/products/filter-and-sort?PageSize=8';
+    let endpoint = '/api/v1/products/filter-and-sort?PageSize=4';
 
     // Add parameters to the endpoint
     for (const [key, value] of Object.entries(params)) {
@@ -74,10 +72,11 @@ export const useProduct = () => {
       },
       isFormData: false,
     });
+    
     return {
-      data: products.value.items,
-      totalPages: Math.round(products.value.totalCount / PageSize),
-      totalItems: products.value.totalCount,
+      data: products.data.value.items,
+      totalPages: Math.round(products.data.value.totalCount / PageSize),
+      totalItems: products.data.value.totalCount,
       page: PageIndex,
     };
   };

@@ -1,233 +1,114 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { ENV } from '@configs/env'
+import React, { useCallback, useRef, useState } from 'react'
 import { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { StyleSheet, View, Text, FlatList, Image, SafeAreaView } from 'react-native'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import EvilIcon from 'react-native-vector-icons/EvilIcons'
-import { ICONS } from '@assets/icons'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import FilterView from '@components/FilterView'
-import { appColors } from '@constants/appColors'
 import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import axios from 'axios'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-
-const fetchProducts = async ({ pageParam = 1 }) => {
-  const response = await axios.get(`${ENV.API_URL}/api/Product`, {
-    params: {
-      page: pageParam,
-      pageSize: 4
-    }
-  })
-  console.log('🚀 ~ fetchProducts ~ response:', response)
-
-  return response.data
-}
+import { useProduct } from '@hooks/useProduct'
+import SearchHeaderHome from '@components/ui/home/SearchHeaderHome'
+import { Layout } from '@components/base'
+import Banner from '@components/ui/home/Banner'
+import CategoriesHome from '@components/ui/home/CategoriesHome'
 
 const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
   const { colors } = useTheme()
   const [categoryIndex, setCategoryIndex] = useState(0)
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-
+  const { fetchProduct } = useProduct();
   const openFilterModal = useCallback(() => {
     bottomSheetModalRef.current?.present()
   }, [])
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } = useInfiniteQuery({
     queryKey: ['products'],
-    queryFn: fetchProducts,
-    getNextPageParam: (lastPage, pages) => {
-      if (pages.length * 4 < lastPage.totalCount) {
-        return pages.length + 1
-      }
-      return undefined
-    }
+    queryFn: 
+    ({ pageParam = 1 }: { pageParam?: number }) =>
+      fetchProduct({
+        PageIndex: pageParam,
+        PageSize: 4,
+        SearchTerm: '',
+        categoryIds: '',      
+        colourIds: '',
+        price_range : '0-500',
+      }),
+      getNextPageParam: (lastPage: any, pages) => {
+        const nextPage = pages.length + 1;
+        return nextPage <= lastPage.totalPages ? nextPage : undefined;
+    },
+    initialPageParam: 1
   })
-
-
-  // if (isLoading)
-  //   return (
-  //     <ActivityIndicator
-  //       style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
-  //       size='large'
-  //       color='#0000ff'
-  //     />
-  //   )
-  // if (isError) return <Text>Error: {error.message}</Text>
-
   const loadMore = () => {
     if (hasNextPage) {
       fetchNextPage()
     }
   }
 
-  const categoryIcons = [
-    { id: '1', icon: ICONS.icAll, name: 'All' },
-    { id: '2', icon: ICONS.icShirt, name: 'Shirt' },
-    { id: '3', icon: ICONS.icTshirt, name: 'T-shirt' },
-    { id: '4', icon: ICONS.icJeans, name: 'Jeans' },
-    { id: '5', icon: ICONS.icPants, name: 'Pants' },
-    { id: '6', icon: ICONS.icShorts, name: 'Shorts' }
-  ]
+  const products = data?.pages.map((page) => page.data)
 
-  const renderCategoryIcon = ({ item }: { item: any }) => (
-    <View style={styles.categoryItem}>
-      <Image source={item.icon} style={styles.categoryImage} />
-      <Text style={{ marginTop: 5, color: colors.text, fontSize: 12 }}>{item.name}</Text>
-    </View>
-  )
-  const products = data?.pages.flatMap((page) => page.data) || []
-
-  const renderItem = ({ item }: { item: any }) => {
-    const productItem = item.productItems[0]
-    const productImageUrl = productItem?.productImage?.productImageUrl
-    const salePrice = productItem?.salePrice
-    const originalPrice = productItem?.originalPrice
-    const discount = 5
-    const rating = 5
-
-    return (
+  const renderItem = ({ item }: { item: any }) => (
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('Details', {
-            id: item.productId
+            id: item.id
           })
         }}
         style={styles.productContainer}
       >
-        <Image source={{ uri: productImageUrl }} style={styles.productImage} />
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>{item.productName}</Text>
-        <Text style={{ fontSize: 14, marginTop: 4, color: colors.text }}>
-          ${originalPrice}{' '}
-          <Text style={styles.discount}>
-            {'- ' + Math.round(((originalPrice - salePrice) / originalPrice) * 100) + ' %'}
-          </Text>
+        <Image source={{ uri: item[0].productImages[0].imageUrl }} style={styles.productImage} />
+        <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>{item[0].name}</Text>
+        <Text style={{ fontSize: 14, marginTop: 4, color: 'red' }}>
+          ${item[0].salePriceMin}
         </Text>
-        <View style={styles.ratingContainer}>
-          <MaterialCommunityIcons name='star' size={16} color='#333' />
-          <Text style={{ marginLeft: 4, fontWeight: 'bold', color: colors.text }}>{rating}</Text>
+        <View style={{ flexDirection: 'row', marginTop: 4, gap:4 }}>
+        <Text style={{ fontSize: 12, color: colors.text, backgroundColor:'#00DDD1', borderRadius: 4, padding: 2, paddingHorizontal: 4 }}>
+        {'-'}{(Math.round(item[0].originalPrice - item[0].salePriceMin) *100/item[0].originalPrice).toFixed(2)}{'%'}
+        </Text>
+        <Text style={{textDecorationLine: 'line-through', fontSize: 12, color: colors.text, padding: 2, paddingHorizontal: 4 }}>
+        ${item[0].originalPrice}
+        </Text>
         </View>
       </TouchableOpacity>
     )
-  }
+  
+  
+
+  const renderProduct = ({ item }: { item: any }) => (
+    <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Details', {
+            id: item.id
+          })
+        }}
+        style={styles.productCard}
+      >
+        <Image source={{ uri: item[0].productImages[0].imageUrl }} style={styles.productImage} />
+        <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>{item[0].name}</Text>
+        <Text style={{ fontSize: 14, marginTop: 4, color: 'red' }}>
+          ${item[0].salePriceMin}
+        </Text>
+        <View style={{ flexDirection: 'row', marginTop: 4, gap:4 }}>
+        <Text style={{ fontSize: 12, color: colors.text, backgroundColor:'#00DDD1', borderRadius: 4, padding: 2, paddingHorizontal: 4 }}>
+        {'-'}{(Math.round(item[0].originalPrice - item[0].salePriceMin) *100/item[0].originalPrice).toFixed(2)}{'%'}
+        </Text>
+        <Text style={{textDecorationLine: 'line-through', fontSize: 12, color: colors.text, padding: 2, paddingHorizontal: 4 }}>
+        ${item[0].originalPrice}
+        </Text>
+        </View>
+      </TouchableOpacity>
+  );
 
   return (
-    <ScrollView>
-      <SafeAreaView style={{ paddingVertical: 24, gap: 24 }}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerText}>VNIU</Text>
-        </View>
-        <View style={{ flexDirection: 'row', paddingHorizontal: 24, gap: 12 }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('SearchScreen')}
-            style={{
-              flex: 1,
-              height: 52,
-              borderRadius: 52,
-              borderWidth: 1,
-              borderColor: colors.border,
-              alignItems: 'center',
-              paddingHorizontal: 24,
-              flexDirection: 'row',
-              gap: 12
-            }}
-          >
-            <EvilIcon name='search' size={24} color={colors.text} style={{ opacity: 0.5 }} />
-            <Text
-              style={{
-                flex: 1,
-                fontSize: 16,
-                color: colors.text,
-                opacity: 0.5
-              }}
-            >
-              Search
-            </Text>
-          </TouchableOpacity>
+    
+      <SafeAreaView style={{ paddingVertical: 24, backgroundColor: '#fff' }}>
 
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ImageSearch')}
-            style={{
-              width: 52,
-              aspectRatio: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 52,
-              backgroundColor: colors.primary
-            }}
-          >
-            <MaterialCommunityIcons name='image-search-outline' size={24} color='#333' />
-          </TouchableOpacity>
-        </View>
-
-        {/* FilterView */}
-        <View
-          style={{
-            flexDirection: 'row',
-            paddingHorizontal: 24,
-            gap: 12,
-            alignItems: 'flex-end',
-            alignContent: 'flex-end',
-            alignSelf: 'flex-end'
-          }}
-        >
-          <TouchableOpacity
-            onPress={openFilterModal}
-            style={{
-              width: 52,
-              aspectRatio: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 52
-            }}
-          >
-            <MaterialCommunityIcons name='sort' size={24} color='#333' />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={openFilterModal}
-            style={{
-              width: 52,
-              aspectRatio: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 52
-            }}
-          >
-            <MaterialCommunityIcons name='filter' size={24} color='#333' />
-          </TouchableOpacity>
-        </View>
-        <View>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={categoryIcons}
-            keyExtractor={(item) => item.id}
-            renderItem={renderCategoryIcon}
-            contentContainerStyle={styles.categoryContainer}
-          />
-        </View>
-
-        {/* Product List */}
-        {/* <ScrollView horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: '5%' }}>
-          <View>
-            <FlatList
-              numColumns={2}
-              showsVerticalScrollIndicator
-              // data={data.pages[0]?.data}
-              data={products}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={renderItem}
-              onEndReached={loadMore}
-              onEndReachedThreshold={0.5}
-              ListFooterComponent={() => {
-                return isFetchingNextPage ? <ActivityIndicator /> : null
-              }}
-            />
-          </View>
-        </ScrollView> */}
+      <SearchHeaderHome navigation={navigation} />
+      <Layout.BodyScrollView>
+         {/* FilterView             onPress={openFilterModal} */}
+        <Banner/>
+        <CategoriesHome />
         {isLoading ? (
           <ActivityIndicator
             style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
@@ -235,14 +116,45 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
             color='#0000ff'
           />
         ) : isError ? null : (
-          <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', padding: wp(1) }}>
+          <>
+              {/* Top Deals Section */}
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle,{color: colors.text}]}>🔥 TOP DEAL • HOT SALES</Text>
+        <FlatList
+          data={products?.slice(0, 3)}
+          horizontal
+          renderItem={renderProduct}
+          keyExtractor={(item) => item[0].id}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalList}
+        />
+      </View>
+
+      {/* Suggested Products Section */}
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle,{color: colors.text}]}>PRODUCTS YOU CAN LIKE</Text>
+        <FlatList
+          data={products?.slice(3, 6)}
+          horizontal
+          renderItem={renderProduct}
+          keyExtractor={(item) => item[0].id}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalList}
+        />
+      </View>
+      <View style={styles.section2}>
+
+      <Text style={[styles.sectionTitle,{color: colors.text, paddingHorizontal:10}]}>TOP PRODUCTS</Text>
+
+                <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', padding: wp(1) }}>
+
             <View>
               <FlatList
+              contentContainerStyle={{ gap: 8, padding: 8, marginBottom: 50 }}
                 numColumns={2}
                 showsVerticalScrollIndicator
-                // data={data.pages[0]?.data}
                 data={products}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={(item) => item[0].id}
                 renderItem={renderItem}
                 onEndReached={loadMore}
                 onEndReachedThreshold={0.5}
@@ -252,9 +164,11 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
               />
             </View>
           </ScrollView>
+          </View>
+          </>
         )}
         <View style={{ height: 50 }} />
-      </SafeAreaView>
+     
       <BottomSheetModal
         snapPoints={['85%']}
         index={0}
@@ -270,8 +184,9 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
       >
         <FilterView />
       </BottomSheetModal>
-    </ScrollView>
-  )
+      </Layout.BodyScrollView>
+      </SafeAreaView>
+          )
 }
 
 const styles = StyleSheet.create({
@@ -280,61 +195,35 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#fff'
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12
+  section: {
+    marginTop: 10,
+    paddingHorizontal: 10,
   },
-  headerText: {
-    fontSize: 20,
+  section2: {
+    marginTop: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: appColors.Primary
+    marginBottom: 10,
   },
-  searchContainer: {
+  horizontalList: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 8
-  },
-  searchText: {
-    marginLeft: 8,
-    color: '#333'
-  },
-  categoryContainer: {
-    alignItems: 'center',
-    paddingVertical: 8
-  },
-  categoryItem: {
-    alignItems: 'center',
-    marginHorizontal: 10
-  },
-  categoryImage: {
-    width: 50,
-    height: 50
-  },
-  categoryName: {
-    marginTop: 5,
-    fontSize: 12
-  },
-  productListContainer: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between'
-  },
-  productListWrapper: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between'
   },
   productContainer: {
-    width: wp(48),
+    width: wp(46),
     // width: 160,
-    padding: 8
+    padding: 8,
+    margin: 2,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  productCard: {
+    width: wp(35),
+    padding: 8,
+    margin: 2,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   productImage: {
     width: '100%',

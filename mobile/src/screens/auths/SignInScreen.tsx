@@ -63,7 +63,7 @@ const SignInScreen = () => {
 
     setLoading(true)
     try {
-      const response = await fetch(`http://10.0.2.2:5000/api/Auth/login`, {
+      const response = await fetch(`${ENV.API_URL}/api/v1/auths/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -77,12 +77,13 @@ const SignInScreen = () => {
       console.log('🚀 ~ handleSubmitForm ~ response:', response)
 
       const data = await response.json()
+      console.log("🚀 ~ handleSubmitForm ~ data:", data)
 
-      if (data.message === 'Login Successfully') {
-        setStorage('accessToken', data.data.accessToken)
-        setStorage('userName', data.data.user.userName)
-        setStorage('email', data.data.user.email)
-        setStorage('id', data.data.user.id)
+      if (data.isSuccess) {
+        setStorage('accessToken', data.value.accessToken)
+        setStorage('userName', data.value.user.userName)
+        setStorage('email', data.value.user.email)
+        setStorage('id', data.value.user.id)
         navigation.navigate('TabsStack', { screen: 'Home' })
       } else {
         Alert.alert('Login Failed', 'Invalid email or password')

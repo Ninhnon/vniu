@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import Image from "next/legacy/image"
-import Link from "next/link"
-import { type Product } from "@/db/schema"
-import { toast } from "sonner"
+import * as React from 'react';
+import Image from 'next/legacy/image';
+import Link from 'next/link';
+import { type Product } from '@/db/schema';
+import { toast } from 'sonner';
 
-import { catchError, cn, formatPrice } from "@/lib/utils"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Button } from "@/components/ui/button"
+import { catchError, cn, formatPrice } from '@/lib/utils';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -16,33 +16,33 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Icons } from "@/components/icons"
-import { addToCartAction } from "@/app/_actions/cart"
+} from '@/components/ui/card';
+import { Icons } from '@/components/icons';
+import { addToCartAction } from '@/app/_actions/cart';
 
 interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
   product: Pick<
     Product,
-    "id" | "name" | "price" | "images" | "category" | "inventory"
-  >
-  variant?: "default" | "switchable"
-  isAddedToCart?: boolean
-  onSwitch?: () => Promise<void>
+    'id' | 'name' | 'price' | 'images' | 'category' | 'inventory'
+  >;
+  variant?: 'default' | 'switchable';
+  isAddedToCart?: boolean;
+  onSwitch?: () => Promise<void>;
 }
 
 export function ProductCard({
   product,
-  variant = "default",
+  variant = 'default',
   isAddedToCart = false,
   onSwitch,
   className,
   ...props
 }: ProductCardProps) {
-  const [isPending, startTransition] = React.useTransition()
+  const [isPending, startTransition] = React.useTransition();
 
   return (
     <Card
-      className={cn("h-full overflow-hidden rounded-sm", className)}
+      className={cn('h-full overflow-hidden rounded-sm', className)}
       {...props}
     >
       <Link href={`/product/${product.id}`}>
@@ -51,7 +51,7 @@ export function ProductCard({
             {product?.images?.length ? (
               <Image
                 src={
-                  product.images[0]?.url ?? "/images/product-placeholder.webp"
+                  product.images[0]?.url ?? '/images/product-placeholder.webp'
                 }
                 alt={product.images[0]?.name ?? product.name}
                 className="object-cover"
@@ -74,7 +74,7 @@ export function ProductCard({
             )}
           </AspectRatio>
         </CardHeader>
-        <span className="sr-only">{product.name}</span>
+        <span className="sr-only line-clamp-2">{product.name}</span>
       </Link>
       <Link href={`/product/${product.id}`} tabIndex={-1}>
         <CardContent className="grid gap-2.5 p-4">
@@ -85,7 +85,7 @@ export function ProductCard({
         </CardContent>
       </Link>
       <CardFooter className="p-4">
-        {variant === "default" ? (
+        {variant === 'default' ? (
           <Button
             aria-label="Add to cart"
             size="sm"
@@ -96,12 +96,12 @@ export function ProductCard({
                   await addToCartAction({
                     productId: product.id,
                     quantity: 1,
-                  })
-                  toast.success("Added to cart.")
+                  });
+                  toast.success('Added to cart.');
                 } catch (err) {
-                  catchError(err)
+                  catchError(err);
                 }
-              })
+              });
             }}
             disabled={isPending}
           >
@@ -115,13 +115,13 @@ export function ProductCard({
           </Button>
         ) : (
           <Button
-            aria-label={isAddedToCart ? "Remove from cart" : "Add to cart"}
+            aria-label={isAddedToCart ? 'Remove from cart' : 'Add to cart'}
             size="sm"
             className="h-8 w-full rounded-sm"
             onClick={() => {
               startTransition(async () => {
-                await onSwitch?.()
-              })
+                await onSwitch?.();
+              });
             }}
             disabled={isPending}
           >
@@ -135,10 +135,10 @@ export function ProductCard({
             ) : (
               <Icons.add className="mr-2 h-4 w-4" aria-hidden="true" />
             )}
-            {isAddedToCart ? "Added" : "Add to cart"}
+            {isAddedToCart ? 'Added' : 'Add to cart'}
           </Button>
         )}
       </CardFooter>
     </Card>
-  )
+  );
 }

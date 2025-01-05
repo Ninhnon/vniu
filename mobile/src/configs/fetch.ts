@@ -1,22 +1,15 @@
 /** @format */
 
-import axiosClient from './axios';
+import { apiClient } from "./apiClient";
+
 
 export const getRequest = async ({ endPoint }: { endPoint: string }) => {
-  const res = await axiosClient.get(endPoint);
+  const res = await apiClient.get(endPoint);
   return res;
 };
 
-export const postRequest = async ({
-  endPoint,
-  formData,
-  isFormData,
-}: {
-  endPoint: string;
-  formData: any;
-  isFormData: any;
-}) => {
-  const res = await axiosClient.post(
+export const postRequest = async ({ endPoint, formData, isFormData }: { endPoint: string; formData: any; isFormData: any }) => {
+  const res = await apiClient.post(
     endPoint,
     isFormData ? formData : JSON.stringify(formData),
     isFormData && {
@@ -29,16 +22,8 @@ export const postRequest = async ({
   return res;
 };
 
-export const putRequest = async ({
-  endPoint,
-  formData,
-  isFormData,
-}: {
-  endPoint: string;
-  formData: any;
-  isFormData: any;
-}) => {
-  const res = await axiosClient.put(
+export const putRequest = async ({ endPoint, formData, isFormData }: { endPoint: string; formData: any; isFormData: any }) => {
+  const res = await apiClient.put(
     endPoint,
     isFormData ? formData : JSON.stringify(formData),
     isFormData && {
@@ -50,14 +35,8 @@ export const putRequest = async ({
   );
   return res;
 };
-export const deleteRequest = async ({
-  endPoint,
-  formData,
-}: {
-  endPoint: string;
-  formData: any;
-}) => {
-  const res = await axiosClient.delete(endPoint, {
+export const deleteRequest = async ({ endPoint, formData }: { endPoint: string; formData: any }) => {
+  const res = await apiClient.delete(endPoint, {
     data: formData,
   });
   return res;

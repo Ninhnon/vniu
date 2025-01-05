@@ -122,7 +122,7 @@ export default function ProductCard({
       </div>
       <Link className="" href={`/product/${product?.id}`}>
         <div className="text-start p-4 text-black/[0.9]">
-          <h2 className="text-lg font-medium">{product?.name}</h2>
+          <h2 className="text-lg font-medium line-clamp-2">{product?.name}</h2>
           <div className="flex flex-wrap items-center text-black/[0.5]">
             <p className="mr-2 text-sm font-semibold ">
               {currencyFormat(product?.salePriceMin)}

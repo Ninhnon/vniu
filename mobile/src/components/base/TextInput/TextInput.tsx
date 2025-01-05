@@ -10,7 +10,6 @@ import {
   View,
 } from 'react-native';
 
-import {FONTS} from '@configs/fonts';
 import {sizeScale} from '@utils/dimensions';
 
 import {COLORS} from '@assets/color';
@@ -60,7 +59,6 @@ const styles = StyleSheet.create({
     gap: sizeScale(8),
   },
   textInput: {
-    fontFamily: FONTS['BeVietnamPro-Light'],
     fontSize: sizeScale(14),
     lineHeight: sizeScale(20),
     color: COLORS.ELEMENT_BASE,

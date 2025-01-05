@@ -1,19 +1,9 @@
 import {StyleSheet, TextStyle} from 'react-native';
 
-import {FONTS} from '@configs/fonts';
 import {sizeScale} from '@utils/dimensions';
 
 import {TTextSize, TTextWeight} from './type';
 
-export const FONTS_WEIGHT_HASH_MAP: {[n in TTextWeight]: TextStyle} =
-  StyleSheet.create({
-    light: {fontFamily: FONTS['BeVietnamPro-Light']},
-    lightItalic: {fontFamily: FONTS['BeVietnamPro-LightItalic']},
-    medium: {fontFamily: FONTS['BeVietnamPro-Medium']},
-    mediumItalic: {fontFamily: FONTS['BeVietnamPro-MediumItalic']},
-    semiBold: {fontFamily: FONTS['BeVietnamPro-SemiBold']},
-    semiBoldItalic: {fontFamily: FONTS['BeVietnamPro-SemiBoldItalic']},
-  });
 
 export const FONTS_SIZE_HASH_MAP: {[n in TTextSize]: TextStyle} =
   StyleSheet.create({

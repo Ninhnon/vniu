@@ -3,6 +3,7 @@ export const IMAGES = {
   avatar: require('./avatar.jpg'),
   logo: require('./logo.png'),
   product: require('./product.png'),
+  banner: require('./banner.png'),
   IMG_ICON_PREVIOUS: require('./PreviousButton.png')
 }
 

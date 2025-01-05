@@ -1,6 +1,5 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-import {FONTS} from '@configs/fonts';
 import {sizeScale} from '@utils/dimensions';
 
 import {TIconButtonSize, TSize} from './types';
@@ -29,17 +28,14 @@ export const labelStyleSize: {[n in TSize]: TextStyle} = StyleSheet.create({
   '56': {
     fontSize: sizeScale(18),
     lineHeight: sizeScale(28),
-    fontFamily: FONTS['BeVietnamPro-Medium'],
   },
   '44': {
     fontSize: sizeScale(16),
     lineHeight: sizeScale(24),
-    fontFamily: FONTS['BeVietnamPro-Medium'],
   },
   '36': {
     fontSize: sizeScale(14),
     lineHeight: sizeScale(20),
-    fontFamily: FONTS['BeVietnamPro-Medium'],
   },
 });
 

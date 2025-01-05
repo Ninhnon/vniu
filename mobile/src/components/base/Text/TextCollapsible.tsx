@@ -20,7 +20,7 @@ import {COLORS} from '@assets/color';
 
 import LinearGradient from '../LinearGradient/LinearGradient';
 import Text from './Text';
-import {FONTS_SIZE_HASH_MAP, FONTS_WEIGHT_HASH_MAP} from './constants';
+import {FONTS_SIZE_HASH_MAP} from './constants';
 import {TTextProps} from './type';
 
 const comment =
@@ -59,7 +59,6 @@ export default function TextCollapsible({
       {
         color: COLORS[color],
         ...FONTS_SIZE_HASH_MAP[size],
-        ...FONTS_WEIGHT_HASH_MAP[weight],
         lineHeight: lineHeight,
         overflow: 'visible',
       },

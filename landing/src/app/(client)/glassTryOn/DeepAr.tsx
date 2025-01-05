@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as deepar from 'deepar';
 import { Card } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Loader from '@/components/Loader';
 
 const listEffects = [
   // {
@@ -116,7 +117,7 @@ const listEffects = [
   },
   {
     path: 'effects/prada-PR14Z_E19D_FE01T_C_050.deepar',
-    name: 'Prada Symbole - Marbleized Black and Yellow',
+    name: 'Prada Symbole - Marbleized',
     image: '/images/prada-symbole-black-yellow.jpg',
     price: 485,
     brand: 'Prada',
@@ -127,7 +128,7 @@ const listEffects = [
   },
   {
     path: 'effects/prada-PR14Z_E142_F05S0_C_050.deepar',
-    name: 'Prada Symbole - Chalk White',
+    name: 'Prada Symbole - Chalk',
     image: '/images/prada-symbole-white.jpg',
     price: 465,
     brand: 'Prada',
@@ -138,7 +139,7 @@ const listEffects = [
   },
   {
     path: 'effects/prada-SPR26Z_E12L_FE08Z_C_055.deepar',
-    name: 'Prada Symbole, Oval - Orange',
+    name: 'Prada Symbole, Oval',
     image: '/images/prada-symbole-oval-orange.jpg',
     price: 445,
     brand: 'Prada',
@@ -149,7 +150,7 @@ const listEffects = [
   },
   {
     path: 'effects/prada-SPR26Z_E16K_FE08Z_C_055.deepar',
-    name: 'Prada Symbole, Oval - Black',
+    name: 'Prada Symbole, Black',
     image: '/images/prada-symbole-oval-black.jpg',
     price: 445,
     brand: 'Prada',
@@ -160,7 +161,7 @@ const listEffects = [
   },
   {
     path: 'effects/prada-SPR26Z_E17K_FE08Z_C_055.deepar',
-    name: 'Prada Symbole, Oval - Chalk White',
+    name: 'Prada Symbole, White',
     image: '/images/prada-symbole-oval-white.jpg',
     price: 445,
     brand: 'Prada',
@@ -171,7 +172,7 @@ const listEffects = [
   },
   {
     path: 'effects/ralph-lauren-RL8188Q_Tortoise.deepar',
-    name: 'Ralph Lauren Stirrup Antibes Dark Havana',
+    name: 'Ralph Lauren Stirrup',
     image: '/images/stirrup-antibes.png',
     price: 325,
     brand: 'Ralph Lauren',
@@ -182,7 +183,7 @@ const listEffects = [
   },
   {
     path: 'effects/ralph-lauren-RL8190Q_Tortoise.deepar',
-    name: 'Ralph Lauren Stirrup Ricky Dark Havana',
+    name: 'Ralph Lauren Ricky',
     image: '/images/stirrup-ricky.png',
     price: 345,
     brand: 'Ralph Lauren',
@@ -193,7 +194,7 @@ const listEffects = [
   },
   {
     path: 'effects/ralph-lauren-RL8189Q_Tortoise.deepar',
-    name: 'Ralph Lauren Stirrup Shield Dark Havana',
+    name: 'Ralph Lauren Stirrup',
     image: '/images/stirrup-shield.png',
     price: 335,
     brand: 'Ralph Lauren',
@@ -226,7 +227,7 @@ const listEffects = [
   },
   {
     path: 'effects/ray-ban-Rb3580n043e4.deepar',
-    name: 'Ray Ban Blaze Cat Eye',
+    name: 'Ray Ban Blaze Cat',
     image: '/images/ray-ban-blaze-cat-eye.jpeg',
     price: 235,
     brand: 'Ray-Ban',
@@ -371,7 +372,7 @@ const DeepARComponent = ({ licenseKey }) => {
       {/* Loading Overlay */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="text-white">Loading...</div>
+          <Loader />
         </div>
       )}
 

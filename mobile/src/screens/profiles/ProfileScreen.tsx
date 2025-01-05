@@ -16,9 +16,7 @@ import SectionComponent from '@components/SectionComponent'
 import RowComponent from '@components/RowComponent'
 import CircleComponent from '@components/CircleComponent'
 import TextComponent from '@components/TextComponent'
-import { useAppNavigation } from '@hooks/app/useAppNavigation'
-const ProfileScreen = () => {
-  const navigation = useAppNavigation()
+const ProfileScreen = ({ navigation }: RootStackScreenProps<'TabsStack'>) => {
   const { colors } = useTheme()
   return (
     <ContainerComponent styles={{ backgroundColor: colors.background }}>
@@ -109,7 +107,7 @@ const ProfileScreen = () => {
         <MenuOptionComponent
           onPress={() => {
             removeStorage('accessToken')
-            navigation.navigate('LogInScreen')
+            navigation.navigate('SignInScreen')
           }}
           text='Logout'
           isLogout

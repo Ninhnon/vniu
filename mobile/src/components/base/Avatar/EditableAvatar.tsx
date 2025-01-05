@@ -1,6 +1,5 @@
 import {IEditableAvatarProps, IPermissionModalContent} from '.';
 import {useAppImageCropPicker} from '@hooks/app/useAppImageCropPicker';
-import {useGetProfileQuery} from '@services/query/userQuery';
 import {Controller, useFormContext} from 'react-hook-form';
 import {RESULTS} from 'react-native-permissions';
 
@@ -23,7 +22,8 @@ import {
 } from '../index';
 
 const EditableAvatar = ({size = 36}: IEditableAvatarProps) => {
-  const {data} = useGetProfileQuery();
+  // const {data} = useGetProfileQuery();
+  const data = {};
 
   const [imagePatch, setImagePatch] = useState<string>(data?.avatar || '');
 

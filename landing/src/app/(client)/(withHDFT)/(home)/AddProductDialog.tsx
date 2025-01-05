@@ -135,7 +135,7 @@ const AddProductDialog = () => {
             {isLoading ? (
               <Skeleton className="w-20 h-10" /> // Sử dụng component Skeleton từ thư viện react-loading-skeleton
             ) : (
-              <span className="text-[10px] sm:text-sm text-gray-700">
+              <span className="text-[10px] sm:text-sm text-gray-700 line-clamp-2">
                 {selectedProduct?.name}
               </span>
             )}

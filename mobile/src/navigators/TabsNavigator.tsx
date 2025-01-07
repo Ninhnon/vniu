@@ -49,6 +49,7 @@ const TabsNavigator = ({ toggleTheme }: any) => {
         name='Cart'
         component={CartScreen}
         options={{
+          headerShown: false,
           tabBarIcon(props) {
             return <MaterialCommunityIcons name='cart' {...props} />
           }

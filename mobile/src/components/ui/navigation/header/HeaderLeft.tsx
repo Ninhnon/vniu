@@ -22,7 +22,7 @@ const HeaderLeft = ({onPress}: IHeaderLeftProps) => {
       onPress={onPress || _handleGoBack}
       hitSlop={12}
       style={styles.button}>
-      <SvgIcon name="arrowLeft" size={20} fill="ELEMENT_ACCENT" />
+      <SvgIcon name="arrowLeft" size={20} fill="PRIMARY" />
     </TouchableOpacity>
   );
 };

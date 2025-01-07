@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     borderWidth: sizeScale(2),
   },
   childrenWrapperFocus: {
-    borderColor: COLORS.BORDER_ACCENT,
+    borderColor: COLORS.PRIMARY,
     backgroundColor: COLORS.SURFACE_ACCENT_5,
   },
 });

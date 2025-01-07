@@ -31,11 +31,11 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   function (response) {
-    // console.log('🚀 ~ response:', response)
+    console.log('🚀 ~ response:', response)
     return response
   },
   function (error) {
-    // console.log('🚀 ~ error:', error)
+    console.log('🚀 ~ error:', error)
     // if (serverErrorStatuses.includes(error.response.status)) {
     //   // showToast('error', 'Connection Error. Please Try Again');
     // }

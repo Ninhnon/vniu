@@ -16,7 +16,7 @@ export default {
     svg: (
       <Svg>
         <Path
-          fill="#16B364"
+          fill="#1A94FF"
           d="M0 6.69a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6v8a6 6 0 0 1-6 6H6a6 6 0 0 1-6-6z"
         />
         <Path

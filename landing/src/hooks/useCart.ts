@@ -264,16 +264,6 @@ export const useCart = () => {
     }
   };
 
-  // const onGetUserWishList = async (userId) => {
-  //   const userWishList = await getRequest({
-  //     endPoint: `/api/user/wishlist?userId=${userId}`,
-  //   });
-  //   if (userWishList) {
-  //     console.log('userWishList', userWishList.products);
-  //   }
-  //   return userWishList;
-  // };
-
   return {
     onAddToCart,
     onIncreaseItemFromCart,
@@ -286,5 +276,3 @@ export const useCart = () => {
     successAdded: addToCartMutation.isSuccess,
   };
 };
-
-//trong hook se return functions va state global

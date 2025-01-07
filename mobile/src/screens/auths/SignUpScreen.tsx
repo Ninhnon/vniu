@@ -16,6 +16,7 @@ import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { ENV } from '@configs/env'
 import { setStorage } from 'src/functions/storageFunctions'
 import { useTheme } from '@react-navigation/native'
+import AppHeader from '@components/ui/navigation/header/AppHeader'
 
 const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
   const [fullName, setFullName] = useState('')
@@ -117,9 +118,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Image source={IMAGES.IMG_ICON_PREVIOUS} />
-      </TouchableOpacity>
+      <AppHeader title='Sign Up' />
 
       <Text style={styles.title}>Sign Up</Text>
       <Text style={styles.subtitle}>Enter your data to continue!</Text>
@@ -186,14 +185,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20
-  },
-  backButton: {
-    top: 30,
-    width: 30,
-    height: 30,
-    backgroundColor: '#E0E0E0',
-    padding: 8,
-    borderRadius: 4
   },
   title: {
     fontSize: 28,

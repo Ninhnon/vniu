@@ -1,3 +1,5 @@
+import { appColors } from "@constants/appColors";
+
 const GLOBAL_COLORS = {
   NEUTRAL_BLACK: '#252726',
   NEUTRAL_1: '#3E4140',
@@ -92,6 +94,8 @@ const GLOBAL_COLORS = {
 };
 
 export const COLORS = {
+  PRIMARY: appColors.primary,
+  LIGHT_BLUE: appColors.LightBlue,
   SURFACE_WHITE: GLOBAL_COLORS.NEUTRAL_WHITE,
   SURFACE_OFF_WHITE: GLOBAL_COLORS.NEUTRAL_10,
   SURFACE_NEUTRAL: GLOBAL_COLORS.NEUTRAL_9,

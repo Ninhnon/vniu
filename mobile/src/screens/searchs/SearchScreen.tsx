@@ -86,9 +86,6 @@ const SearchScreen = () => {
 
     <SearchHeader />
     <ScrollView style={styles.container}>
-      {/* <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Image source={IMAGES.IMG_ICON_PREVIOUS} />
-      </TouchableOpacity>
       <View style={styles.header}>
         <View style={styles.search}>
           <TextInput

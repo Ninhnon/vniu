@@ -57,6 +57,8 @@ const SignInScreen = () => {
   }
 
   const handleSubmitForm = async () => {
+    // navigation.navigate('TabsStack', { screen: 'Home' })
+    // return
     if (!validate()) {
       return
     }

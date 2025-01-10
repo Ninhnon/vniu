@@ -73,7 +73,9 @@ export function CartSheet() {
               {itemCount}
             </Badge>
           )}
-          {CommonSvg.cart({ className: 'h-4 w-4' })}
+          {CommonSvg.cart({
+            className: 'text-slate-600 stroke-zinc-950 h-4 w-4',
+          })}
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">

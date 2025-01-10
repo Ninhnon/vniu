@@ -14,7 +14,7 @@ import ImageModal from './ImageModal';
 //   isLast?: boolean;
 // }
 
-const MessageBox: React.FC = ({ data, isLast }) => {
+const MessageBox: React.FC = ({ data }) => {
   const session = useSession();
   const [imageModalOpen, setImageModalOpen] = useState(false);
 

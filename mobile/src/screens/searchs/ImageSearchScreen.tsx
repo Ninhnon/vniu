@@ -1,336 +1,4 @@
-// import React, { useState, useEffect } from 'react'
-// import {
-//   View,
-//   ActivityIndicator,
-//   FlatList,
-//   TouchableOpacity,
-//   ScrollView,
-//   StyleSheet,
-//   Text,
-//   Button,
-//   Alert,
-//   Image,
-//   SafeAreaView
-// } from 'react-native'
-// import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker'
-// import { ENV } from '@configs/env'
-// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-// import { useTheme } from '@react-navigation/native'
-// import { useNavigation } from '@react-navigation/native'
-// import { IMAGES } from '@assets/images'
-// import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-// import AppHeader from '@components/ui/navigation/header/AppHeader'
-// import { Layout } from '@components/base'
-
-// const FASTAPI_URL = 'http://10.0.2.2:8000/retrieve-image/'
-// function getRandomInt(min: number, max: number) {
-//   return Math.floor(Math.random() * (max - min + 1)) + min
-// }
-// type ProductItem = {
-//   ProductItemId: string
-//   ProductImageUrl: string
-//   productName: string
-// }
-// const ImageSearchScreen = () => {
-//   const { colors } = useTheme()
-//   const navigation = useNavigation()
-//   const [image, setImage] = useState(null)
-//   const [loading, setLoading] = useState(false)
-//   const [results, setResults] = useState(null)
-//   const pickImage = () => {
-//     ImagePicker.openPicker({
-//       mediaType: 'photo',
-//       width: 100,
-//       height: 80,
-//       maxFiles: 1,
-//       minFiles: 1,
-//       cropping: true
-//     })
-//       .then((image) => {
-//         setImage(image.path)
-//         setResults(null)
-//         uploadImage(image)
-//       })
-//       .catch((err) => {
-//         console.log('ImagePicker Error: ', err)
-//       })
-//   }
-//   const uploadImage = async (image: ImageOrVideo) => {
-//     setLoading(true)
-//     const formData = new FormData()
-//     formData.append('file', {
-//       uri: image.path,
-//       type: image.mime,
-//       name: `${getRandomInt(1, 10000)}.jpg`
-//     })
-//     console.log('🚀 ~ uploadImage ~ formData:', formData)
-
-//     try {
-//       const response = await fetch(FASTAPI_URL, {
-//         method: 'POST',
-//         body: formData,
-//         headers: {
-//           Accept: 'application/json',
-//           'Content-Type': 'multipart/form-data'
-//         }
-//       })
-//       const data = await response.json()
-//       setResults(data.retrieved_images) // Setting results directly from the API response
-//       setLoading(false)
-//     } catch (error) {
-//       console.error('Error uploading image:', error)
-//       setLoading(false)
-//     }
-//   }
-
-//   // const uploadImage = (image) => {
-//   //   setLoading(true)
-//   //   const formData = new FormData()
-//   //   formData.append('file', {
-//   //     uri: image.path,
-//   //     type: image.mime,
-//   //     name: 'uploaded_image.jpg'
-//   //   })
-//   //   formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-//   //   formData.append('cloud_name', 'dwhzyu0oo')
-
-//   //   fetch('https://api.cloudinary.com/v1_1/dwhzyu0oo/image/upload', {
-//   //     method: 'POST',
-//   //     body: formData,
-//   //     headers: {
-//   //       Accept: 'application/json',
-//   //       'Content-Type': 'multipart/form-data'
-//   //     }
-//   //   })
-//   //     .then((res) => res.json())
-//   //     .then((data) => {
-//   //       searchImage(data.url)
-//   //     })
-//   //     .catch((error) => {
-//   //       Alert.alert('Error While Uploading')
-//   //     })
-//   // }
-//   const searchImage = (imageUrl: string) => {
-//     const params = new URLSearchParams()
-//     params.append('url', imageUrl)
-
-//     fetch(FASTAPI_URL, {
-//       method: 'POST',
-//       body: params.toString(),
-//       headers: {
-//         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-//       }
-//     })
-//       .then((res) => res.json())
-//       .then((data) => {
-//         const productItemIds: string[] = data.nearest_images.map((result: [string, string]) => result[1])
-//         const uniqueProductItemIds = [...new Set(productItemIds)] // Loại bỏ trùng lặp
-//         fetchProducts(uniqueProductItemIds)
-//         setLoading(false)
-//       })
-//       .catch((err) => {
-//         console.error(err)
-//         setLoading(false)
-//       })
-//   }
-
-//   const fetchProducts = (productItemIds: unknown[]) => {
-//     fetch(ENV.API_URL + '/api/Product/get-products-by-ids', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify(productItemIds)
-//     })
-//       .then((res) => {
-//         return res.json()
-//       })
-//       .then((data) => {
-//         // console.log('🚀 ~ .then ~ data:', data)
-//         setResults(data.data)
-//       })
-//       .catch((err) => {
-//         console.error('Error fetching products:', err)
-//       })
-//   }
-//   const navigateToDetails = (productId: string) => {
-//     navigation.navigate('Details', {
-//       id: productId
-//     })
-//   }
-//   const renderItem = ({ item }: { item: ProductItem }) => {
-//     // console.log('🚀 ~ renderItem ~ item:', item)
-//     // const productItem = item.productItems[0]
-//     const productImageUrl = item.ProductImageUrl
-//     // console.log('🚀 ~ renderItem ~ productImageUrl:', productImageUrl)
-//     const productId = item.ProductItemId
-//     // const productImageUrl = require('D:/DoAn/DoAn2/vniu/mobile/src/dataset/cloth/Calvin-Klein-Jeans-Utility-Overshirt-In-Olive-Green_14.jpg')
-
-//     const originalPrice = 100
-//     const discount = 5
-//     const rating = 5
-
-//     return (
-//       <TouchableOpacity onPress={() => navigateToDetails(productId)} style={styles.productContainer}>
-//         <Image source={{ uri: productImageUrl }} style={styles.productImage} />
-//         <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>{item.productName}</Text>
-//         <Text style={{ fontSize: 14, marginTop: 4, color: colors.text }}>
-//           ${originalPrice} <Text style={styles.discount}>-{discount}%</Text>
-//         </Text>
-//         <View style={styles.ratingContainer}>
-//           <MaterialCommunityIcons name='star' size={16} color='#333' />
-//           <Text style={{ marginLeft: 4, fontWeight: 'bold', color: colors.text }}>{rating}</Text>
-//         </View>
-//       </TouchableOpacity>
-//     )
-//   }
-
-//   return (
-//   <SafeAreaView style={styles.container}>
-//     <AppHeader title='Image Search' />
-//     <Layout.Wrapper justifyContent='center' alignItems='center'>
-//       <View style={styles.pickImageContainer}>
-//         <Text style={[styles.instruction, { color: colors.text }]}>Please pick an image</Text>
-//         <Button title='Pick Image' onPress={pickImage} />
-//       </View>
-//       {image && <Image source={{ uri: image }} style={styles.image} />}
-//       {loading && <ActivityIndicator size='large' color='#0000ff' />}
-//       {results && (
-//         <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: wp(1) }}>
-//           <View>
-//             <FlatList
-//               numColumns={2}
-//               showsVerticalScrollIndicator
-//               data={results}
-//               keyExtractor={(item, index) => index.toString()}
-//               renderItem={renderItem}
-//             />
-//           </View>
-//         </ScrollView>
-//       )}
-//       </Layout.Wrapper>
-//     </SafeAreaView>
-//   )
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 16,
-//     backgroundColor: '#fff'
-//   },
-//   image: {
-//     width: 200,
-//     height: 200,
-//     marginVertical: 20
-//   },
-//   pickImageContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     marginBottom: 20
-//   },
-//   instruction: {
-//     fontSize: 16,
-//     marginRight: 10
-//   },
-//   resultItem: {
-//     margin: 10,
-//     alignItems: 'center'
-//   },
-//   resultImage: {
-//     width: 100,
-//     height: 100
-//   },
-//   productListContainer: {
-//     flexGrow: 1,
-//     flexDirection: 'row',
-//     flexWrap: 'wrap',
-//     justifyContent: 'space-between'
-//   },
-//   productListWrapper: {
-//     flexDirection: 'row',
-//     flexWrap: 'wrap',
-//     justifyContent: 'space-between'
-//   },
-//   productContainer: {
-//     width: wp(48),
-//     padding: 8
-//   },
-//   productImage: {
-//     width: '100%',
-//     height: 200,
-//     resizeMode: 'cover'
-//   },
-//   productName: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     marginTop: 8
-//   },
-//   productPrice: {
-//     fontSize: 14,
-//     marginTop: 4
-//   },
-//   discount: {
-//     color: 'green'
-//   },
-//   productDetails: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     marginTop: 4
-//   },
-//   ratingContainer: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     marginTop: 8
-//   },
-//   rating: {
-//     marginLeft: 4,
-//     fontWeight: 'bold'
-//   },
-//   soldCount: {
-//     marginLeft: 8,
-//     color: '#888'
-//   },
-//   navContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-around',
-//     paddingVertical: 12,
-//     borderTopWidth: 1,
-//     borderTopColor: '#e0e0e0'
-//   },
-//   header: {
-//     width: '90%',
-//     margin: 50,
-//     height: 50,
-//     fontWeight: 'bold',
-//     fontSize: 24,
-//     marginBottom: '2%',
-//     flexDirection: 'row',
-//     textAlign: 'center',
-//     alignItems: 'center',
-//     alignSelf: 'center'
-//   },
-//   text: {
-//     left: 10
-//   },
-//   search: {
-//     position: 'relative',
-//     height: '100%',
-//     width: '100%',
-//     justifyContent: 'center',
-//     borderRadius: 20,
-//     borderWidth: 1
-//   },
-//   list: {
-//     flex: 1,
-//     justifyContent: 'space-between',
-//     alignItems: 'center'
-//   }
-// })
-
-// export default ImageSearchScreen
-
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {
   View,
   Text,
@@ -342,35 +10,156 @@ import {
   StyleSheet,
   Platform,
   Alert,
+  ActivityIndicator,
+  Modal,
 } from 'react-native';
-import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker'
-
+import ImagePicker from 'react-native-image-crop-picker';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import { PERMISSIONS, request } from 'react-native-permissions';
+import {PERMISSIONS, request} from 'react-native-permissions';
+import {appColors} from '@constants/appColors';
+import {useNavigation, useTheme} from '@react-navigation/native';
+import BottomSheetHeader from '@components/ui/search/BottomSheetHeader';
+import {postRequest} from '@configs/fetch';
+import {ENV} from '@configs/env';
+import {BottomSheet, Layout} from '@components/base';
+import {Hooks} from '@hooks/index';
 
 const ImageSearchScreen = () => {
-  const [galleryImages, setGalleryImages] = useState([]);
-  const [capturedImage, setCapturedImage] = useState(null);
+  const navigation = useNavigation();
+  const {colors} = useTheme();
+  const [galleryImages, setGalleryImages] = useState<
+    {uri: string; height: number; width: number}[]
+  >([]);
+  const [capturedImage, setCapturedImage] = useState<{uri: string} | null>(
+    null,
+  );
+  const [productItemIds, setProductItemIds] = useState([]);
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  const snapPoints = useMemo(() => [wp(25), wp(50), wp(75)], []);
   useEffect(() => {
     checkPermissions();
   }, []);
+  useEffect(() => {
+    if (capturedImage) {
+      uploadImage(capturedImage);
+    }
+  }, [capturedImage]);
+  useEffect(() => {
+    if (productItemIds && productItemIds.length > 0) {
+      fetchProductForImageSearch({productItemIds}).then(data => {
+        setResults(data.data);
+      });
+    }
+  }, [productItemIds]);
+  const uploadImage = async (image: {uri: any}) => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('file', {
+      uri: image.uri,
+      type: 'image/jpeg',
+      name: 'cropped.jpg',
+    });
+
+    try {
+      const response = await fetch(
+        `${ENV.API_URL}/image-search/images/search-by-image`,
+        {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Accept: 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        },
+      );
+      const data = await response.json();
+      setProductItemIds(data.productItemIds);
+    } catch (err) {
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchProductForImageSearch = async ({
+    productItemIds = [],
+  }: {
+    productItemIds?: string[] | null;
+  }) => {
+    let endpoint = '/api/v1/products/filter-and-sort?PageIndex=1&PageSize=8';
+    const {minPrice, maxPrice} = {minPrice: 0, maxPrice: 500};
+    const products = await postRequest({
+      endPoint: endpoint,
+      formData: {
+        CategoryIds: [],
+        ratingValue: 0,
+        minPrice,
+        maxPrice,
+        colourIds: [],
+        sizeOptionIds: [],
+        productItemIds,
+      },
+      isFormData: false,
+    });
+
+    return {
+      data: products.data.value.items,
+    };
+  };
   const pickImage = () => {
     ImagePicker.openCamera({
-      width: 150,
-      height: 200,
+      width: 300,
+      height: 400,
       cropping: true,
       includeExif: true,
     })
-      .then((image) => {
-        setCapturedImage(image.path)
-        // uploadImage(image)
+      .then(image => {
+        setCapturedImage({uri: image.path}); // uploadImage(image)
       })
-      .catch((err) => {
-        console.log('ImagePicker Error: ', err)
+      .catch(err => {
+        console.log('ImagePicker Error: ', err);
+      });
+  };
+  const cropImage = () => {
+    if (capturedImage) {
+      ImagePicker.openCropper({
+        path: capturedImage.uri,
+        width: 300,
+        height: 400,
+        cropping: true,
+        mediaType: 'photo',
       })
-  }
+        .then(image => {
+          setCapturedImage({uri: image.path});
+        })
+        .catch(err => {
+          console.log('Cropper Error: ', err);
+        });
+    }
+  };
+  const cropImage2 = (uri: string) => {
+    ImagePicker.openCropper({
+      path: uri,
+      width: 300,
+      height: 400,
+      cropping: true,
+      mediaType: 'photo',
+    })
+      .then(image => {
+        setCapturedImage({uri: image.path});
+      })
+      .catch(err => {
+        console.log('Cropper Error: ', err);
+      });
+  };
+
   const checkPermissions = async () => {
     try {
       let cameraPermission;
@@ -381,7 +170,7 @@ const ImageSearchScreen = () => {
         photoLibraryPermission = await request(
           Platform.Version >= 33
             ? PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-            : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
+            : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
         );
       } else {
         cameraPermission = await request(PERMISSIONS.IOS.CAMERA);
@@ -407,8 +196,7 @@ const ImageSearchScreen = () => {
         first: 50,
         assetType: 'Photos',
       });
-      console.log("🚀 ~ loadGalleryImages ~ photos:", photos)
-      setGalleryImages(photos.edges.map((edge) => edge.node.image));
+      setGalleryImages(photos.edges.map(edge => edge.node.image));
     } catch (err) {
       console.error('Error Loading Gallery:', err);
     }
@@ -430,19 +218,45 @@ const ImageSearchScreen = () => {
       return (
         <View style={styles.previewContainer}>
           <Image
-            source={{ uri: capturedImage.uri }}
+            source={{uri: capturedImage.uri}}
             style={styles.previewImage}
           />
+          <TouchableOpacity style={styles.cropButton} onPress={cropImage}>
+            <Icon name="crop" size={24} color="#FFF" />
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.closePreviewButton}
-            onPress={() => setCapturedImage(null)}
-          >
+            onPress={() => setCapturedImage(null)}>
             <Icon name="close-circle" size={30} color="#fff" />
           </TouchableOpacity>
         </View>
       );
     }
-    return null;
+    return (
+      <View
+        style={[
+          styles.previewContainer,
+          {
+            justifyContent: 'center',
+            borderWidth: 1,
+            borderColor: appColors.Primary,
+            borderRadius: 10,
+            margin: 10,
+          },
+        ]}>
+        <TouchableOpacity onPress={pickImage} style={{padding: 10}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: appColors.Primary,
+            }}>
+            Please pick an image
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   const renderGallery = () => (
@@ -452,12 +266,13 @@ const ImageSearchScreen = () => {
         <FlatList
           data={galleryImages}
           numColumns={3}
-          renderItem={({ item }) => (
+          renderItem={({item}) => (
             <TouchableOpacity
               style={styles.galleryItem}
-              onPress={() => setCapturedImage({ uri: item.uri })}
-            >
-              <Image source={{ uri: item.uri }} style={styles.galleryImage} />
+              onPress={() => {
+                cropImage2(item.uri);
+              }}>
+              <Image source={{uri: item.uri}} style={styles.galleryImage} />
             </TouchableOpacity>
           )}
           keyExtractor={(item, index) => index.toString()}
@@ -467,18 +282,97 @@ const ImageSearchScreen = () => {
       )}
     </View>
   );
-  const takePhotoRef = useRef<TKycTakePhotoRef>(null);
-  const _handleOnTakePhoto = useCallback(
-    (uri: string) => {
-     console.log(uri);
-    },[]
+  const {
+    ref: bottomSheetRef,
+    open: openBottomSheet,
+    close: closeBottomSheet,
+  } = Hooks.App.useAppBottomSheet();
+  const renderItem = ({item}: {item: any}) => (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('Details', {
+          id: item.id,
+        });
+      }}
+      style={styles.productContainer}>
+      <Image
+        source={{uri: item.productImages[0].imageUrl}}
+        style={styles.productImage}
+      />
+      <Text
+        numberOfLines={2}
+        style={{
+          fontSize: 16,
+          fontWeight: 'bold',
+          marginTop: 8,
+          color: colors.text,
+        }}>
+        {item.name}
+      </Text>
+      <Text style={{fontSize: 14, marginTop: 4, color: 'red'}}>
+        ${item.salePriceMin}
+      </Text>
+      <View style={{flexDirection: 'row', marginTop: 4, gap: 4}}>
+        <Text
+          style={{
+            fontSize: 12,
+            color: colors.text,
+            backgroundColor: '#00DDD1',
+            borderRadius: 4,
+            padding: 2,
+            paddingHorizontal: 4,
+          }}>
+          {'-'}
+          {(
+            (Math.round(item.originalPrice - item.salePriceMin) * 100) /
+            item.originalPrice
+          ).toFixed(2)}
+          {'%'}
+        </Text>
+        <Text
+          style={{
+            textDecorationLine: 'line-through',
+            fontSize: 12,
+            color: colors.text,
+            padding: 2,
+            paddingHorizontal: 4,
+          }}>
+          ${item.originalPrice}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
+  useEffect(() => {
+    if (results && capturedImage) openBottomSheet();
+    else closeBottomSheet();
+  }, [results, capturedImage]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       {renderHeader()}
       {renderPreview()}
       {renderGallery()}
+      <BottomSheet ref={bottomSheetRef}>
+        <Layout.Wrapper>
+          <BottomSheetHeader close={closeBottomSheet} />
+          <FlatList
+            numColumns={2}
+            data={results}
+            keyExtractor={item => item.id}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false} // Allow vertical scroll
+            contentContainerStyle={styles.flatListContent}
+          />
+          <View style={{height: 50, width: '100%'}} />
+        </Layout.Wrapper>
+      </BottomSheet>
+      <Modal visible={loading} transparent animationType="fade">
+        <View
+          style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color={appColors.Primary} />
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -530,7 +424,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
-    color:'red'
+    color: 'red',
   },
   galleryItem: {
     flex: 1 / 3,
@@ -546,6 +440,77 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     color: '#999',
+  },
+  cropButton: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 15,
+    padding: 10,
+  },
+  cropButtonText: {
+    color: '#fff',
+  },
+  bottomSheetContent: {
+    alignItems: 'center',
+    paddingBottom: 20,
+  },
+  flatListContent: {
+    paddingHorizontal: 16,
+    flexGrow: 1,
+    paddingBottom: 50,
+  },
+
+  productContainer: {
+    width: wp(46),
+    // width: 160,
+    padding: 8,
+    margin: 2,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  productCard: {
+    width: wp(35),
+    padding: 8,
+    margin: 2,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  productImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+  },
+  productName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 8,
+  },
+  productPrice: {
+    fontSize: 14,
+    marginTop: 4,
+  },
+  discount: {
+    color: 'green',
+  },
+  productDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 4,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  rating: {
+    marginLeft: 4,
+    fontWeight: 'bold',
+  },
+  soldCount: {
+    marginLeft: 8,
+    color: '#888',
   },
 });
 

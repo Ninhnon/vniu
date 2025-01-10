@@ -13,98 +13,65 @@ import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 import { CommonSvg } from '@/assets/CommonSvg';
 import Link from 'next/link';
+import AuthSvg from '@/assets/AuthSvg';
+import { signOut } from 'next-auth/react';
 
 const sidebarNavItems = [
   {
     title: 'Account',
-    href: '/dashboard/account',
+    href: 'user/profile',
     icon: 'user',
     items: [],
   },
   {
-    title: 'Stores',
-    href: '/dashboard/stores',
+    title: 'Orders',
+    href: 'user/profile/orders',
     icon: 'store',
-    items: [],
-  },
-  {
-    title: 'Add Product',
-    href: '/admin/add-product',
-    icon: 'billing',
-    items: [],
-  },
-  {
-    title: 'Purchases',
-    href: '/dashboard/purchases',
-    icon: 'dollarSign',
     items: [],
   },
 ];
 const mainNavItems = [
   {
-    title: 'Men',
+    title: 'Shirt',
     items: [
       {
-        title: 'Shoes',
-        href: '/products?gender=1&subcategories=1.2.3.4.9.10',
+        title: 'Hoodie',
+        href: '/products?categoryIds=de3b7ec3-5d4d-4a74-b772-1a32b3fe8b64',
         description: 'All the products we have to offer.',
         items: [],
       },
       {
-        title: 'Clothing',
-        href: '/products?gender=1&subcategories=5.6.11.12.13.14',
+        title: 'Polo',
+        href: '/products?categoryIds=1ba3ff22-f0e4-4a69-9f56-f55fa9deeae8',
         description: 'Build your own custom skateboard.',
         items: [],
       },
       {
-        title: 'Accessories and Equipment',
-        href: '/products?gender=1&subcategories=7.8.15.16.17.18',
+        title: 'Shirt',
+        href: '/products?categoryIds=832c6153-0a8b-463b-b868-0c6666647ced',
         description: 'Read our latest blog posts.',
         items: [],
       },
     ],
   },
   {
-    title: 'Women',
+    title: 'Trouser',
     items: [
       {
-        title: 'Shoes',
-        href: '/products?gender=2&subcategories=1.2.3.4.9.10',
+        title: 'Jeans',
+        href: '/products?categoryIds=eab1fd95-1fd0-4076-9e4f-939743f1f9b1',
         description: 'All the products we have to offer.',
         items: [],
       },
       {
-        title: 'Clothing',
-        href: '/products?gender=2&subcategories=5.6.11.12.13.14',
+        title: 'Tall',
+        href: '/products?categoryIds=181ae735-fea6-4d5c-aca1-24265090d7f2',
         description: 'Build your own custom skateboard.',
         items: [],
       },
       {
-        title: 'Accessories and Equipment',
-        href: '/products?gender=2&subcategories=7.8.15.16.17.18',
-        description: 'Read our latest blog posts.',
-        items: [],
-      },
-    ],
-  },
-  {
-    title: 'Kids',
-    items: [
-      {
-        title: 'Shoes',
-        href: '/products?gender=3&subcategories=1.2.3.4.9.10',
-        description: 'All the products we have to offer.',
-        items: [],
-      },
-      {
-        title: 'Clothing',
-        href: '/products?gender=3&subcategories=5.6.11.12.13.14',
-        description: 'Build your own custom skateboard.',
-        items: [],
-      },
-      {
-        title: 'Accessories and Equipment',
-        href: '/products?gender=3&subcategories=7.8.15.16.17.18',
+        title: 'Short',
+        href: '/products?categoryIds=299099c6-223f-43dd-aeda-f3433494ad72',
         description: 'Read our latest blog posts.',
         items: [],
       },
@@ -203,6 +170,16 @@ export function MobileNav({ session }) {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+            <Button
+              onClick={() => {
+                localStorage.removeItem('accessToken');
+                signOut({ callbackUrl: '/auth/login' });
+              }}
+              className="border-solid border-t-2 mt-2  gap-2"
+            >
+              <div className="">{AuthSvg.signIn()}</div>
+              Logout
+            </Button>
           </div>
         </ScrollArea>
       </SheetContent>

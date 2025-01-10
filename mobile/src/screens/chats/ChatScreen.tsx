@@ -1,245 +1,272 @@
-import React from 'react'
-import { chatApi } from '@apis'
-import { MessageResponseType } from '@appTypes/chat.type'
-import  ContainerComponent  from '@components/ContainerComponent'
-import { appColors } from '@constants/appColors'
-import { HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, {useEffect, useState} from 'react';
 import {
-  Bubble,
-  BubbleProps,
-  GiftedChat,
-  IMessage,
-  InputToolbar,
-  InputToolbarProps,
-  Send as SendGiftedChat,
-  SendProps,
-  SystemMessage
-} from 'react-native-gifted-chat'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { getStringStorage } from 'src/functions/storageFunctions'
-import { globalStyles } from 'src/styles/globalStyles'
+  View,
+  TextInput,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+} from 'react-native';
+import {HubConnectionBuilder, HttpTransportType} from '@microsoft/signalr';
+import {useQuery} from '@tanstack/react-query';
+import {getStringStorage} from 'src/functions/storageFunctions';
+import MessageBox from './MessageBox';
+import {chatApi} from '@apis';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useImage} from '@hooks/useImage';
+import {postRequest} from '@configs/fetch';
+import ImagePicker, {ImageOrVideo} from 'react-native-image-crop-picker';
 
 const ChatScreen = () => {
-  const [messages, setMessages] = useState<IMessage[]>([])
-  const [text, setText] = useState('')
-  const userId = getStringStorage('id')
+  const [isUploading, setIsUploading] = useState(false);
+  const [imageFiles, setImageFiles] = useState<ImageOrVideo[]>([]);
+  const {onUploadImage} = useImage();
+  const [newMessage, setNewMessage] = useState('');
+  const [messages, setMessages] = useState<
+    Array<{
+      id: string;
+      content?: string;
+      createdAt: string;
+      userId: string;
+      name?: string;
+      avatarUrl?: string;
+      imageUrl?: string;
+    }>
+  >([]);
+  const [connection, setConnection] = useState(null);
+  const userId =
+    getStringStorage('id') || '4b98e7c5-8440-4789-8b31-de5d10171404';
 
-  const [connection, setConnection] = useState<null | HubConnection>(null)
-
-  const insets = useSafeAreaInsets()
-
-  const { data: chatRoomData } = useQuery({
-    queryKey: ['chatroom', userId],
-    queryFn: () => chatApi.getChatRoomByUser(userId)
-  })
-
-  const { data: messagesData } = useQuery({
+  const {data: messagesData, refetch} = useQuery({
     queryKey: ['message', userId],
-    queryFn: () => chatApi.getMessagesByUser(userId)
-  })
-
-  const sendMessageMutation = useMutation({
-    mutationFn: chatApi.sendMessageByUser
-  })
+    queryFn: () => chatApi.getMessagesByUser(userId),
+  });
 
   useEffect(() => {
     if (messagesData) {
-      console.log(messagesData)
-      setMessages([
-        ...messagesData.data.data.map((msg) => {
-          return {
-            _id: msg.messageId,
-            text: msg.messageContent,
-            createdAt: new Date(msg.messageCreateAt),
-            user: {
-              _id: msg.isFromUser === true ? 1 : 0,
-              name: msg.isFromUser ? 'You' : 'Admin'
-            }
-          }
-        })
-      ])
+      console.log('🚀 ~ useEffect ~ messagesData:', messagesData.data);
+      setMessages(
+        messagesData.data.value.items.map(msg => ({
+          id: msg.id,
+          content: msg.content,
+          createdAt: new Date(msg.createdDate),
+          userId: msg.user.id,
+          name: msg.user.userName,
+          avatarUrl: msg.user.avatarUrl,
+          imageUrl: msg.imageUrl,
+        })),
+      );
     }
-  }, [messagesData])
-
+  }, [messagesData]);
+  const pickImage = () => {
+    ImagePicker.openPicker({
+      multiple: true,
+    }).then(images => {
+      console.log(images);
+      setImageFiles(images);
+    });
+  };
   useEffect(() => {
+    const accessToken = getStringStorage('accessToken');
     const connect = new HubConnectionBuilder()
-      .configureLogging(LogLevel.Debug)
-      .withUrl(`http://10.0.2.2:5000/chathub`, {
-        skipNegotiation: true,
-        transport: HttpTransportType.WebSockets
-      })
-      .withAutomaticReconnect()
-      .build()
-    setConnection(connect)
-  }, [])
-
-  useEffect(() => {
-    if (connection) {
-      connection
-        .start()
-        .then(() => {
-          connection.on('ReceiveMessage', (message: MessageResponseType) => {
-            // handle chatroom id by checking chatroom id
-            console.log(chatRoomData)
-            const messageCustom = [
-              {
-                _id: message.messageId,
-                text: message.messageContent,
-                createdAt: new Date(message.messageCreateAt),
-                user: {
-                  _id: message.isFromUser === true ? 1 : 0,
-                  name: message.isFromUser ? 'You' : 'Admin'
-                }
-              }
-            ]
-            console.log('message', message)
-            setMessages((prevMessage) => GiftedChat.append(prevMessage, messageCustom))
-          })
-
-        })
-        .catch((error) => console.log(error))
-    }
-  }, [connection, userId])
-
-  const onSend = useCallback((messages: IMessage[]) => {
-    // setMessages((prevMsg) => GiftedChat.append(prevMsg, messages))
-    // console.log(messages)
-    sendMessageMutation.mutate(
-      {
-        userId,
-        body: {
-          isFromUser: true,
-          isRead: true,
-          messageContent: messages[0].text,
-          imageUrl: messages[0].image
-        }
-      },
-      {
-        onSuccess: (data) => {
-          console.log(data.data.data)
+      .withUrl(
+        `https://vniuvm.southeastasia.cloudapp.azure.com:5000/hubs/chat?access_token=${accessToken}`,
+        {
+          skipNegotiation: true,
+          transport: HttpTransportType.WebSockets,
         },
-        onError: (error) => {
-          console.log(error)
-        }
-      }
-    )
-  }, [])
+      )
+      .withAutomaticReconnect()
+      .build();
 
-  const renderInputToolbar = (props: InputToolbarProps<IMessage>) => {
-    return (
-      <InputToolbar
-        {...props}
-        containerStyle={{ backgroundColor: appColors.bgPrimary, borderWidth: 1 }}
-        renderActions={() => (
-          <View style={{ height: 49, justifyContent: 'center', alignItems: 'center', left: 5 }}>
-            <Ionicons name='add' color={appColors.primary} size={28} />
-          </View>
-        )}
-      />
-    )
-  }
+    setConnection(connect);
 
-  const renderBubble = (props: Readonly<BubbleProps<IMessage>>) => {
-    return (
-      <Bubble
-        {...props}
-        textStyle={{
-          right: {
-            color: appColors.bgPrimary
-          }
-        }}
-        wrapperStyle={{
-          left: [
-            {
-              backgroundColor: '#fff'
-            },
-            globalStyles.shadow
-          ],
-          right: [
-            {
-              backgroundColor: appColors.primary
-            },
-            globalStyles.shadow
-          ]
-        }}
-      />
-    )
-  }
+    connect
+      .start()
+      .then(() => {
+        connect.on('ReceiveMessage', message => {
+          const newMessage = {
+            id: message.id,
+            content: message.content,
+            createdAt: new Date(message.createdDate),
+            userId: message.user.id,
+            name: message.user.userName,
+            avatarUrl: message.user.avatarUrl,
+            imageUrl: message.imageUrl,
+          };
+          setMessages(prevMessages => [...prevMessages, newMessage]);
+        });
+      })
+      .catch(err => console.error('Connection failed:', err));
+  }, []);
 
-  const renderSend = (props: SendProps<IMessage>) => (
-    <View
-      style={{
-        height: 49,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 14,
-        paddingHorizontal: 14
-      }}
-    >
-      {/* {text === '' && (
-        <>
-          <Ionicons name='camera-outline' color={appColors.primary} size={28} />
-          <Ionicons name='mic-outline' color={appColors.primary} size={28} />
-        </>
-      )} */}
-      {text !== '' && (
-        <SendGiftedChat
-          {...props}
-          containerStyle={{
-            justifyContent: 'center'
-          }}
-        >
-          <Ionicons name='send' color={appColors.primary} size={28} />
-        </SendGiftedChat>
-      )}
-    </View>
-  )
+  const handleSendMessage = async () => {
+    if (!newMessage && imageFiles.length === 0) return;
 
+    if (newMessage) {
+      const temporaryMessage = {
+        id: Date.now().toString(),
+        content: newMessage,
+        userId,
+        createdAt: new Date().toISOString(),
+      };
+      setMessages([...messages, temporaryMessage]);
+      const response = await postRequest({
+        endPoint: '/api/v1/chat-messages',
+        formData: {
+          userId,
+          content: newMessage,
+        },
+        isFormData: false,
+      });
+      console.log('🚀 ~ handleSendMessage ~ response:', response);
+      setNewMessage('');
+    }
+
+    if (imageFiles.length > 0) {
+      setIsUploading(true);
+      const res = await postRequest({
+        endPoint: '/api/v1/file-storages/upload',
+        formData: imageFiles,
+        isFormData: true,
+      });
+      console.log('🚀 ~ onUploadImage ~ res.data.value:', res.data);
+      const uploadedImages = res.data.value.map((image: any) => image.url);
+      if (!res.data.isSuccess) return;
+      console.log('🚀 ~ handleSendMessage ~ uploadedImages:', uploadedImages);
+      uploadedImages.forEach(async (imageUrl: any) => {
+        const temporaryMessage = {
+          id: Date.now().toString(),
+          userId,
+          imageUrl,
+          createdAt: new Date().toISOString(),
+        };
+        setMessages([...messages, temporaryMessage]);
+        const response = await postRequest({
+          endPoint: '/api/v1/chat-messages',
+          formData: {
+            userId,
+            imageUrl,
+          },
+          isFormData: false,
+        });
+        console.log('🚀 ~ handleSendMessage ~ response:', response);
+      });
+      setIsUploading(false);
+      setImageFiles([]);
+    }
+  };
+  const handleDelete = (path: string) => {
+    setImageFiles(prevFiles => prevFiles.filter(file => file.path !== path));
+  };
   return (
-    <>
-      <ContainerComponent isBack isChat>
-        {/* chat-message */}
-        <View style={{ flex: 1, marginBottom: insets.bottom, backgroundColor: appColors.gray }}>
-          <GiftedChat
-            messages={messages}
-            onSend={(messages: any) => onSend(messages)}
-            onInputTextChanged={setText}
-            user={{
-              _id: 1
-            }}
-            renderSystemMessage={(props) => <SystemMessage {...props} textStyle={{ color: appColors.gray }} />}
-            renderSend={renderSend}
-            renderBubble={renderBubble}
-            // renderInputToolbar={renderInputToolbar}
-
-            textInputProps={styles.composer}
-            maxComposerHeight={100}
-            bottomOffset={insets.bottom}
-            scrollToBottom
-          />
+    <View style={styles.container}>
+      {isUploading && (
+        <View style={styles.uploadingOverlay}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text>Uploading...</Text>
         </View>
-      </ContainerComponent>
-    </>
-  )
-}
-export default ChatScreen
+      )}
+
+      <FlatList
+        data={messages}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => <MessageBox data={item} />}
+        contentContainerStyle={styles.messageList}
+        // inverted
+      />
+      {imageFiles.length > 0 && (
+        <FlatList
+          data={imageFiles}
+          horizontal
+          keyExtractor={item => item.path}
+          renderItem={({item}) => (
+            <View style={styles.imageContainer}>
+              <Image source={{uri: item.path}} style={styles.image} />
+              <TouchableOpacity
+                onPress={() => handleDelete(item.path)}
+                style={styles.deleteButton}>
+                <Text style={styles.deleteButtonText}>X</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      )}
+      <View style={styles.inputContainer}>
+        <TouchableOpacity onPress={pickImage}>
+          <Ionicons name="grid-outline" size={24} color="#007BFF" />
+        </TouchableOpacity>
+        <TextInput
+          style={styles.input}
+          placeholder="Type a message..."
+          placeholderTextColor={'#000'}
+          value={newMessage}
+          onChangeText={setNewMessage}
+        />
+        <TouchableOpacity onPress={handleSendMessage}>
+          <Ionicons name="paper-plane-outline" size={24} color="#007BFF" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  composer: {
-    backgroundColor: '#fff',
-    color: 'black',
-    borderRadius: 18,
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+  messageList: {
+    padding: 16,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    borderTopWidth: 1,
+    borderColor: '#DDD',
+  },
+  input: {
+    flex: 1,
+    padding: 8,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 20,
+    marginHorizontal: 8,
     borderWidth: 1,
-    borderColor: appColors.text2,
-    paddingHorizontal: 10,
-    paddingTop: 8,
-    fontSize: 16,
-    marginTop: 4,
-    marginBottom: 4
-  }
-})
+  },
+  uploadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageContainer: {
+    marginBottom: 16,
+    position: 'relative',
+  },
+  image: {
+    width: 80,
+    height: 100,
+    borderRadius: 8,
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 0, 0, 0.7)',
+    padding: 4,
+    borderRadius: 4,
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});
+
+export default ChatScreen;

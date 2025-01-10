@@ -1,11 +1,10 @@
-import React from 'react'
-import { chatApi } from '@apis'
-import { ChatbotResponseType } from '@appTypes/chat.type'
-import  ContainerComponent  from '@components/ContainerComponent'
-import { appColors } from '@constants/appColors'
-import { useMutation } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React from 'react';
+import {chatApi} from '@apis';
+import ContainerComponent from '@components/ContainerComponent';
+import {appColors} from '@constants/appColors';
+import {useMutation} from '@tanstack/react-query';
+import {useCallback, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {
   Bubble,
   BubbleProps,
@@ -15,64 +14,74 @@ import {
   InputToolbarProps,
   Send as SendGiftedChat,
   SendProps,
-  SystemMessage
-} from 'react-native-gifted-chat'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { globalStyles } from 'src/styles/globalStyles'
-
+  SystemMessage,
+} from 'react-native-gifted-chat';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {globalStyles} from 'src/styles/globalStyles';
+import {postRequest} from '@configs/fetch';
+const generateRandomId = () => {
+  return `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`;
+};
 const ChatBotScreen = () => {
-  const [messages, setMessages] = useState<IMessage[]>([])
-  const [text, setText] = useState('')
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [text, setText] = useState('');
 
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
 
-  const chatbotResponseMutation = useMutation({
-    mutationFn: chatApi.chatbotResponse
-  })
+  const onSend = useCallback(async (messages: IMessage[]) => {
+    setMessages(prevMsg => GiftedChat.append(prevMsg, messages));
+    console.log(messages);
 
-  const onSend = useCallback((messages: IMessage[]) => {
-    setMessages((prevMsg) => GiftedChat.append(prevMsg, messages))
-    console.log(messages)
-    chatbotResponseMutation.mutate(messages[0].text, {
-      onSuccess: (data) => {
-        console.log(data.data.data)
-        const chatbotResponseData: ChatbotResponseType = data.data.data
-        const messageChatbotResponseCustom: IMessage[] = [
-          {
-            _id: chatbotResponseData.chatbotId,
-            text: chatbotResponseData.chatbotContent,
-            createdAt: new Date(chatbotResponseData.messageCreateAt),
-            image: chatbotResponseData.imageUrl ? chatbotResponseData.imageUrl : undefined,
-            user: {
-              _id: chatbotResponseData.isFromUser == true ? 1 : 0,
-              name: chatbotResponseData.isFromUser ? 'You' : 'Admin'
-            }
-          }
-        ]
+    const input = messages[0].text;
+    console.log('🚀 ~ onSend ~ input:', input);
 
-        // add in gifted chat
-        setMessages((prevMessage) => GiftedChat.append(prevMessage, messageChatbotResponseCustom))
-      },
-      onError: (error) => {
-        console.log(error)
-      }
-    })
-  }, [])
+    try {
+      const response = await postRequest({
+        endPoint: '/api/v1/chat-messages/chatbot',
+        formData: {content: input},
+        isFormData: false,
+      });
+
+      const chatbotResponseData = response.data.value;
+
+      const botMessage: IMessage = {
+        _id: generateRandomId(),
+        text: chatbotResponseData.content,
+        createdAt: new Date(chatbotResponseData.createdDate),
+        user: {
+          _id: 2,
+          name: 'Bot',
+        },
+        image: chatbotResponseData.imageUrl
+          ? chatbotResponseData.imageUrl
+          : undefined,
+      };
+      setMessages(prevMessages => GiftedChat.append(prevMessages, botMessage));
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  }, []);
 
   const renderInputToolbar = (props: InputToolbarProps<IMessage>) => {
     return (
       <InputToolbar
         {...props}
-        containerStyle={{ backgroundColor: appColors.bgPrimary, borderWidth: 1 }}
+        containerStyle={{backgroundColor: appColors.bgPrimary, borderWidth: 1}}
         renderActions={() => (
-          <View style={{ height: 49, justifyContent: 'center', alignItems: 'center', left: 5 }}>
-            <Ionicons name='add' color={appColors.primary} size={28} />
+          <View
+            style={{
+              height: 49,
+              justifyContent: 'center',
+              alignItems: 'center',
+              left: 5,
+            }}>
+            <Ionicons name="add" color={appColors.primary} size={28} />
           </View>
         )}
       />
-    )
-  }
+    );
+  };
 
   const renderBubble = (props: Readonly<BubbleProps<IMessage>>) => {
     return (
@@ -80,26 +89,26 @@ const ChatBotScreen = () => {
         {...props}
         textStyle={{
           right: {
-            color: appColors.bgPrimary
-          }
+            color: appColors.bgPrimary,
+          },
         }}
         wrapperStyle={{
           left: [
             {
-              backgroundColor: '#fff'
+              backgroundColor: '#fff',
             },
-            globalStyles.shadow
+            globalStyles.shadow,
           ],
           right: [
             {
-              backgroundColor: appColors.primary
+              backgroundColor: appColors.primary,
             },
-            globalStyles.shadow
-          ]
+            globalStyles.shadow,
+          ],
         }}
       />
-    )
-  }
+    );
+  };
 
   const renderSend = (props: SendProps<IMessage>) => (
     <View
@@ -109,9 +118,8 @@ const ChatBotScreen = () => {
         alignItems: 'center',
         justifyContent: 'center',
         gap: 14,
-        paddingHorizontal: 14
-      }}
-    >
+        paddingHorizontal: 14,
+      }}>
       {/* {text === '' && (
         <>
           <Ionicons name='camera-outline' color={appColors.primary} size={28} />
@@ -122,28 +130,34 @@ const ChatBotScreen = () => {
         <SendGiftedChat
           {...props}
           containerStyle={{
-            justifyContent: 'center'
-          }}
-        >
-          <Ionicons name='send' color={appColors.primary} size={28} />
+            justifyContent: 'center',
+          }}>
+          <Ionicons name="send" color={appColors.primary} size={28} />
         </SendGiftedChat>
       )}
     </View>
-  )
+  );
 
   return (
     <>
       <ContainerComponent isBack isChat>
         {/* chat-message */}
-        <View style={{ flex: 1, marginBottom: insets.bottom, backgroundColor: appColors.gray }}>
+        <View
+          style={{
+            flex: 1,
+            marginBottom: insets.bottom,
+            backgroundColor: appColors.gray,
+          }}>
           <GiftedChat
             messages={messages}
             onSend={(messages: any) => onSend(messages)}
             onInputTextChanged={setText}
             user={{
-              _id: 1
+              _id: 1,
             }}
-            renderSystemMessage={(props) => <SystemMessage {...props} textStyle={{ color: appColors.gray }} />}
+            renderSystemMessage={props => (
+              <SystemMessage {...props} textStyle={{color: appColors.gray}} />
+            )}
             renderSend={renderSend}
             renderBubble={renderBubble}
             // renderInputToolbar={renderInputToolbar}
@@ -155,9 +169,9 @@ const ChatBotScreen = () => {
         </View>
       </ContainerComponent>
     </>
-  )
-}
-export default ChatBotScreen
+  );
+};
+export default ChatBotScreen;
 
 const styles = StyleSheet.create({
   composer: {
@@ -170,6 +184,6 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     fontSize: 16,
     marginTop: 4,
-    marginBottom: 4
-  }
-})
+    marginBottom: 4,
+  },
+});

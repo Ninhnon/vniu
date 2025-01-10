@@ -64,6 +64,8 @@ const SignInScreen = () => {
     }
 
     setLoading(true)
+    console.log("🚀 ~ handleSubmitForm ~ ENV.API_URL:", ENV.API_URL)
+
     try {
       const response = await fetch(`${ENV.API_URL}/api/v1/auths/login`, {
         method: 'POST',

@@ -4,6 +4,8 @@ import * as deepar from 'deepar';
 import { Card } from '@/components/ui/card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Loader from '@/components/Loader';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 const listEffects = [
   // {
@@ -303,6 +305,23 @@ const DeepARComponent = ({ licenseKey }) => {
   const isInitializingRef = useRef(false);
   const [currentEffect, setCurrentEffect] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  const handleGoBack = () => {
+    turnOffCamera();
+    router.push('/');
+  };
+  const turnOffCamera = () => {
+    if (deepARInstanceRef.current) {
+      deepARInstanceRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      turnOffCamera();
+    };
+  }, []);
 
   useEffect(() => {
     const initializeDeepAR = async () => {
@@ -425,6 +444,12 @@ const DeepARComponent = ({ licenseKey }) => {
           </div>
         </div>
       </div>
+      <Button
+        onClick={handleGoBack}
+        className="absolute top-4 left-4 z-50 bg-white text-black rounded-full shadow-md"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </Button>
     </div>
   );
 };

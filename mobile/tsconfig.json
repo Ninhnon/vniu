@@ -5,7 +5,6 @@
     // ... other configs, if any
     "jsx": "react",
     "skipLibCheck": true,
-    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@apis": ["src/apis/index"],

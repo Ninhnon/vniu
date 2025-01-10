@@ -544,7 +544,7 @@ export default function Products({
           {data?.pages?.[0]?.totalItems ? (
             <InfiniteScroll
               loader={<Spinner size="lg" />}
-              dataLength={(data?.pages?.length + 1) * 8} //This is important field to render the next data
+              dataLength={(data?.pages?.length + 1) * 8}
               next={() => {
                 fetchNextPage();
               }}

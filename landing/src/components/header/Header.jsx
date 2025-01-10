@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 'use client';
-
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { CaretDownIcon } from '@radix-ui/react-icons';
@@ -24,12 +24,49 @@ import { CartSheet } from '../CartSheet';
 import { Badge } from '../ui/badge';
 import Logo from '../logo';
 import { useWishList } from '@/hooks/useWishList';
-import { Camera, Upload, X } from 'lucide-react';
+import {
+  Camera,
+  Upload,
+  X,
+  Search,
+  GlassesIcon,
+  AlertCircle,
+} from 'lucide-react';
 
 const NavigationMenuDemo = ({ session }) => {
   const [user] = useState(session?.user);
   const [show, setShow] = useState('translate-y-0');
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const popularSearches = [
+    'Adidas',
+    'asos',
+    'Tommy',
+    'jeans',
+    'asos-design-smart-oversized-tapered-trousers',
+    'Flag',
+    'T-shirt',
+    'tennis',
+  ];
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (!isSearchOpen) {
+      setTimeout(() => {
+        document.getElementById('search-input')?.focus();
+      }, 100);
+    }
+  };
+  const router = useRouter();
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      router.push(`/products?SearchTerm=${searchQuery}`);
+    } else return;
+    toggleSearch();
+  };
   useEffect(() => {
     window.addEventListener('scroll', controlNavbar);
     return () => {
@@ -60,11 +97,17 @@ const NavigationMenuDemo = ({ session }) => {
       className={`w-full h-[50px] md:h-[80px] 
     bg-white  items-center justify-between z-20
     sticky top-0 transition-transform duration-300 px-5 lg:px-20
+    
     ${show}
     `}
     >
       <MobileNav session={session} />
-      <div className="hidden lg:flex py-2  ">
+      <div
+        className="hidden lg:flex py-2"
+        className={`flex items-center justify-between px-2 h-16 ${
+          isSearchOpen ? 'hidden' : 'block'
+        }`}
+      >
         <Logo />
         <NavigationMenu.Root className="NavigationMenuRoot">
           <NavigationMenu.List className="NavigationMenuList">
@@ -196,12 +239,40 @@ const NavigationMenuDemo = ({ session }) => {
         </NavigationMenu.Root>
         {user ? (
           <div className="flex flex-row gap-5 items-center justify-center">
+            <button
+              onClick={toggleSearch}
+              className="flex flex-row items-center w-full max-w-md px-4 py-2 hover:bg-gray-100 text-zinc-800 bg-zinc-100 focus:bg-white rounded-full focus:outline-none focus:ring-[1px] focus:ring-black"
+            >
+              <input
+                type="text"
+                placeholder="What are you looking for"
+                className="flex-1 bg-transparent border-none focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <Search className="w-6 h-6 text-gray-500" />
+            </button>
             <Link href={'/image/search'}>
               <label className="cursor-pointer flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-4 py-2">
                 <Camera className="w-5 h-5" />
                 <span className="text-sm flex ">Search</span>
               </label>
             </Link>
+            <div className="relative">
+              <Link href={'/glassTryOn'}>
+                <label className="cursor-pointer flex flex-row items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-4 py-2">
+                  <GlassesIcon className="w-6 h-6" />
+                  <div className="flex w-full">Glass</div>
+                </label>
+              </Link>
+              <Badge
+                variant="secondary"
+                className="absolute -right-2 -top-2 flex items-center justify-center rounded-full bg-red-500"
+              >
+                <AlertCircle className="w-4 h-4" />
+              </Badge>
+            </div>
+
             <Link href={'/favorite'}>
               <Button variant="outline" size="icon" className="relative">
                 {wishListCount > 0 && (
@@ -258,6 +329,47 @@ const NavigationMenuDemo = ({ session }) => {
             <CartSheet />
           </div>
         )}
+      </div>
+      <div
+        className={`absolute top-0 left-0 right-0 bg-white transition-transform duration-300 ease-in-out ${
+          isSearchOpen ? 'translate-x-0' : 'hidden'
+        }`}
+      >
+        <div className="flex items-center px-4 h-16">
+          <div className="flex-1 flex items-center bg-gray-100 rounded-full px-4">
+            <Search className="w-5 h-5 text-gray-500" />
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Search"
+              className="flex-1 bg-transparent border-none focus:outline-none px-3 py-2"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
+          </div>
+          <button
+            onClick={toggleSearch}
+            className="ml-4 p-2 hover:bg-gray-100 rounded-full"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        <div className="px-4 py-6">
+          <h3 className="text-gray-500 mb-4">Popular Search Terms</h3>
+          <div className="flex flex-wrap gap-2">
+            {popularSearches.map((term) => (
+              <button
+                key={term}
+                className="px-4 py-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+                onClick={() => setSearchQuery(term)}
+              >
+                {term}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

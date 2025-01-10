@@ -18,7 +18,10 @@ type TBottomSheetProps = PropsWithChildren<
   } & ActionSheetProps
 >;
 const BottomSheet = forwardRef<TBottomSheetRef, TBottomSheetProps>(
-  ({children, gestureEnabled, ...props}: TBottomSheetProps, ref) => {
+  (
+    {children, gestureEnabled, snapPoints, ...props}: TBottomSheetProps,
+    ref,
+  ) => {
     return (
       <ActionSheet
         isModal

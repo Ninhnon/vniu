@@ -1,11 +1,8 @@
-/* eslint-disable no-unsafe-optional-chaining */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import MessageBox from './MessageBox';
-import React, { useEffect, useState, useCallback } from 'react';
-import toast from 'react-hot-toast';
+import React, { useEffect, useState } from 'react';
 import { HiPaperAirplane, HiPhoto } from 'react-icons/hi2';
 import { ImageDialog } from '@/components/imageDialog';
 import { z } from 'zod';
@@ -17,7 +14,6 @@ import chatApi from '@/lib/chats/ChatApi'; // Adjust the import based on your pr
 import {
   HubConnection,
   HubConnectionBuilder,
-  LogLevel,
   HttpTransportType,
 } from '@microsoft/signalr';
 import { useSession } from 'next-auth/react';
@@ -81,7 +77,7 @@ const Body = ({ session }) => {
     const accessToken = localStorage.getItem('accessToken');
     const connect = new HubConnectionBuilder()
       .withUrl(
-        `https://vniu.southeastasia.cloudapp.azure.com:5000/hubs/chat?access_token=${accessToken}`,
+        `https://vniuvm.southeastasia.cloudapp.azure.com:5000/hubs/chat?access_token=${accessToken}`,
         {
           skipNegotiation: true,
           transport: HttpTransportType.WebSockets,

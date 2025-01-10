@@ -1,4 +1,4 @@
-import { postRequest } from "@configs/fetch";
+import {postRequest} from '@configs/fetch';
 
 export const useProduct = () => {
   const onGetProductDetail = async ({
@@ -8,7 +8,7 @@ export const useProduct = () => {
     slug: string;
     colourId?: string;
   }) => {
-    const formData = colourId ? { colourId } : {};
+    const formData = colourId ? {colourId} : {};
 
     const productDetail = await postRequest({
       endPoint: `/api/v1/products/${slug}`,
@@ -17,7 +17,7 @@ export const useProduct = () => {
     });
     // const data = await productDetail?.json();
 
-    return productDetail.value;
+    return productDetail.data.value;
   };
 
   const fetchProduct = async ({
@@ -53,12 +53,12 @@ export const useProduct = () => {
     }
     const CategoryIds = categoryIds ? categoryIds.split('.') : [];
     const ColourIds = colourIds ? colourIds.split('.') : [];
-    const { minPrice, maxPrice } = price_range
+    const {minPrice, maxPrice} = price_range
       ? {
           minPrice: price_range.split('-')[0],
           maxPrice: price_range.split('-')[1],
         }
-      : { minPrice: 0, maxPrice: 500 };
+      : {minPrice: 0, maxPrice: 500};
     const products = await postRequest({
       endPoint: endpoint,
       formData: {
@@ -72,7 +72,7 @@ export const useProduct = () => {
       },
       isFormData: false,
     });
-    
+
     return {
       data: products.data.value.items,
       totalPages: Math.round(products.data.value.totalCount / PageSize),
@@ -80,9 +80,61 @@ export const useProduct = () => {
       page: PageIndex,
     };
   };
+  const fetchProductForImageSearch = async ({
+    productItemIds = [],
+  }: {
+    productItemIds?: string[] | null;
+  }) => {
+    // Construct the base endpoint
+    let endpoint = '/api/v1/products/filter-and-sort?PageIndex=1&PageSize=8';
+
+    const {minPrice, maxPrice} = {minPrice: 0, maxPrice: 500};
+    const products = await postRequest({
+      endPoint: endpoint,
+      formData: {
+        CategoryIds: [],
+        ratingValue: 0,
+        minPrice,
+        maxPrice,
+        colourIds: [],
+        sizeOptionIds: [],
+        productItemIds,
+      },
+      isFormData: false,
+    });
+
+    return {
+      data: products.data.value.items,
+    };
+  };
+  const fetchListProduct = async () => {
+    // Construct the base endpoint
+    let endpoint = '/api/v1/products/filter-and-sort?PageIndex=1&PageSize=8';
+
+    const {minPrice, maxPrice} = {minPrice: 0, maxPrice: 500};
+    const products = await postRequest({
+      endPoint: endpoint,
+      formData: {
+        CategoryIds: [],
+        ratingValue: 0,
+        minPrice,
+        maxPrice,
+        colourIds: [],
+        sizeOptionIds: [],
+        productItemIds: [],
+      },
+      isFormData: false,
+    });
+
+    return {
+      data: products.data.value.items,
+    };
+  };
 
   return {
     onGetProductDetail,
     fetchProduct,
+    fetchProductForImageSearch,
+    fetchListProduct,
   };
 };

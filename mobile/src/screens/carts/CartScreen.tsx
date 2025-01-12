@@ -16,14 +16,28 @@ import {useTheme} from '@react-navigation/native';
 import AppHeader from '@components/ui/navigation/header/AppHeader';
 import {useCart} from '@hooks/useCart';
 import {CheckBox} from '@components/base';
-
+import {getRequest} from '@configs/fetch';
+import {getStringStorage} from 'src/functions/storageFunctions';
+import {useQuery} from '@tanstack/react-query';
+const userId = getStringStorage('id');
+const fetchUserCart = async () => {
+  try {
+    const response = await getRequest({
+      endPoint: `/api/v1/users/${userId}/cart-items/filter-and-sort?PageIndex=1&PageSize=100`,
+    });
+    return response.data.value.items;
+  } catch (error) {
+    console.error('Error fetching user cart:', error);
+  }
+};
 const CartScreen = ({navigation}: TabsStackScreenProps<'Cart'>) => {
   const {colors} = useTheme();
   const [selectedItems, setSelectedItems] = useState([]);
-  const {
-    cart: cartItems,
-    // onUpdateCart
-  } = useCart();
+
+  const {data: cartItems} = useQuery({
+    queryKey: ['cartItems'],
+    queryFn: () => fetchUserCart(),
+  });
   console.log('🚀 ~ CartScreen ~ cartItems:', cartItems);
 
   const handleSelectItem = (cartItemId: any) => {

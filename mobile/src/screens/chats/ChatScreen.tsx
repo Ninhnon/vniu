@@ -18,8 +18,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useImage} from '@hooks/useImage';
 import {postRequest} from '@configs/fetch';
 import ImagePicker, {ImageOrVideo} from 'react-native-image-crop-picker';
+import {useTheme} from '@react-navigation/native';
 
 const ChatScreen = () => {
+  const {colors} = useTheme();
   const [isUploading, setIsUploading] = useState(false);
   const [imageFiles, setImageFiles] = useState<ImageOrVideo[]>([]);
   const {onUploadImage} = useImage();
@@ -163,6 +165,9 @@ const ChatScreen = () => {
   };
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={[styles.headerText, {color: colors.text}]}>Chat</Text>
+      </View>
       {isUploading && (
         <View style={styles.uploadingOverlay}>
           <ActivityIndicator size="large" color="#0000ff" />
@@ -217,6 +222,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  header: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderColor: '#DDD',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   messageList: {
     padding: 16,

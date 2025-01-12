@@ -1,19 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import { currencyFormat, parseJSON } from '@/lib/utils';
-import React, { use, useEffect, useState } from 'react';
-import { IoMdHeartEmpty } from 'react-icons/io';
-import { BsFillCheckCircleFill } from 'react-icons/bs';
-import Image from 'next/legacy/image';
-import { useCart } from '@/hooks/useCart';
+import { currencyFormat } from '@/lib/utils';
+import React, { useState } from 'react';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 
 function ProductDetailRight({ data, selectedColor, handleColorSelect }) {
@@ -25,7 +14,6 @@ function ProductDetailRight({ data, selectedColor, handleColorSelect }) {
 
   const { onSelectProduct, onToggleDialog } = useSelectedProduct();
 
-  const { cart } = useCart();
   return (
     <div className="flex-[1] py-3">
       {/* Product Title */}

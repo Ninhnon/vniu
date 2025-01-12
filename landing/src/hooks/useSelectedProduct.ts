@@ -6,7 +6,6 @@ import {
   toggleSuccess,
   unselectProduct,
 } from '@/redux/cart/selected-product/selectedProduct';
-import { getRequest } from '@/lib/fetch';
 
 export const useSelectedProduct = () => {
   const dispatch = useDispatch();
@@ -19,10 +18,6 @@ export const useSelectedProduct = () => {
 
   const onSelectProduct = useCallback(async (data: any) => {
     try {
-      // const productDetail = await getRequest({
-      //   endPoint: `/api/product/${data?.data.id}`,
-      // });
-
       dispatch(selectProduct(data.data));
     } catch (error) {
       console.error(error);

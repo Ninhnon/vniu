@@ -28,6 +28,7 @@ import {postRequest} from '@configs/fetch';
 import {ENV} from '@configs/env';
 import {BottomSheet, Layout} from '@components/base';
 import {Hooks} from '@hooks/index';
+import AppHeader from '@components/ui/navigation/header/AppHeader';
 
 const ImageSearchScreen = () => {
   const navigation = useNavigation();
@@ -203,14 +204,16 @@ const ImageSearchScreen = () => {
   };
 
   const renderHeader = () => (
-    <View style={styles.header}>
-      <Text style={styles.title}>Image Search</Text>
-      <View style={styles.headerIcons}>
-        <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
-          <Icon name="camera" size={24} color="#000" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    <AppHeader
+      title="Image Search"
+      renderHeaderRight={() => (
+        <View style={styles.headerIcons}>
+          <TouchableOpacity onPress={pickImage} style={styles.iconButton}>
+            <Icon name="camera" size={24} color="#000" />
+          </TouchableOpacity>
+        </View>
+      )}
+    />
   );
 
   const renderPreview = () => {

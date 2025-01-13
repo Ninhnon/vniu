@@ -33,10 +33,6 @@ function ProductDetailScreen({
     params: {id},
   },
 }: RootStackScreenProps<'Details'>) {
-  const userId = getStringStorage('id');
-  const access_token = getStringStorage('accessToken');
-  console.log('🚀 ~ access_token:', access_token);
-
   const queryClient = useQueryClient();
   const {colors} = useTheme();
   const [data, setData] = useState(null);
@@ -86,15 +82,6 @@ function ProductDetailScreen({
   };
 
   const addToCart = async () => {
-    console.log(
-      '🚀 ~ addToCart ~ selectedSize?.variationId:',
-      selectedSize?.variationId,
-    );
-    console.log(
-      '🚀 ~ addToCart ~ data?.activeObject.activeProductItem.id:',
-      data?.activeObject.activeProductItem.id,
-    );
-    console.log('🚀 ~ addToCart ~ quantity:', quantity);
     try {
       const response = await postRequest({
         endPoint: `/api/v1/cart-items`,
@@ -105,8 +92,6 @@ function ProductDetailScreen({
         },
         isFormData: false,
       });
-
-      console.log('🚀 ~ addToCartMutationFn ~ response:', response);
       if (!response.data.isSuccess) {
         showToast('error', 'Add to cart failed');
       } else {

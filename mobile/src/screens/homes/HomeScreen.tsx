@@ -22,7 +22,6 @@ import SearchHeaderHome from '@components/ui/home/SearchHeaderHome';
 import {Layout, Skeleton} from '@components/base';
 import Banner from '@components/ui/home/Banner';
 import CategoriesHome from '@components/ui/home/CategoriesHome';
-import {getStringStorage} from 'src/functions/storageFunctions';
 
 const HomeScreen = ({navigation}: TabsStackScreenProps<'Home'>) => {
   const {colors} = useTheme();
@@ -32,7 +31,6 @@ const HomeScreen = ({navigation}: TabsStackScreenProps<'Home'>) => {
   const openFilterModal = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
-  const userId = getStringStorage('id') || '';
 
   const {
     data,
@@ -74,7 +72,7 @@ const HomeScreen = ({navigation}: TabsStackScreenProps<'Home'>) => {
     <TouchableOpacity
       onPress={() => {
         navigation.navigate('Details', {
-          id: item.id,
+          id: item[0].id,
         });
       }}
       style={styles.productContainer}>
@@ -201,7 +199,7 @@ const HomeScreen = ({navigation}: TabsStackScreenProps<'Home'>) => {
       />
       <View style={{flexDirection: 'row', marginTop: 4, gap: 4}}>
         <Skeleton.Item
-          width={100}
+          width={10}
           height={20}
           style={{
             padding: 2,
@@ -209,7 +207,7 @@ const HomeScreen = ({navigation}: TabsStackScreenProps<'Home'>) => {
           }}
         />
         <Skeleton.Item
-          width={100}
+          width={10}
           height={20}
           style={{
             padding: 2,

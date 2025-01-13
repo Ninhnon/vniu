@@ -38,7 +38,6 @@ const CartScreen = ({navigation}: TabsStackScreenProps<'Cart'>) => {
     queryKey: ['cartItems'],
     queryFn: () => fetchUserCart(),
   });
-  console.log('🚀 ~ CartScreen ~ cartItems:', cartItems);
 
   const handleSelectItem = (cartItemId: any) => {
     setSelectedItems(prevSelected =>
@@ -63,6 +62,7 @@ const CartScreen = ({navigation}: TabsStackScreenProps<'Cart'>) => {
     const itemsToOrder = cartItems.filter((item: {cartItemId: any}) =>
       selectedItems.includes(item?.id),
     );
+
     navigation.navigate('OrderScreen', {
       itemsToOrder,
       total: calculateTotalPrice(),

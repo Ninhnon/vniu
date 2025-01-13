@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   },
   orderDetails: {
     marginBottom: 16,
+    padding: 16,
   },
   detailTitle: {
     fontWeight: 'bold',

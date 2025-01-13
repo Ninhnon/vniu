@@ -63,6 +63,7 @@ const StripeForm = ({
         shippingMethodId: selectedShipping.id,
         promotionId: selectedPromotion.id,
         orderLines: dataArray,
+        phoneNumber: '0123456789',
       },
       isFormData: false,
     });

@@ -2,7 +2,6 @@ import React from 'react';
 
 import {appColors} from '@constants/appColors';
 import {useNavigation} from '@react-navigation/native';
-import queryString from 'query-string';
 import {ActivityIndicator, Modal, View} from 'react-native';
 import WebView, {WebViewNavigation} from 'react-native-webview';
 import {ENV} from '@configs/env';
@@ -20,14 +19,8 @@ const ModalWebView = (props: Props) => {
   const navigation: any = useNavigation();
 
   const onUrlChange = (webViewState: WebViewNavigation) => {
-    console.log('web view state: ', webViewState);
-    // handle url
-    console.log('🚀 ~ onUrlChange ~ ENV.API_URL:', ENV.API_URL);
-
     if (webViewState.url.includes(`${ENV.API_URL}/api`)) {
       // Removed the extra closing brace
-      const urlValues = queryString.parse(webViewState.url);
-      console.log('url values: ', urlValues);
 
       clearWebViewState();
     }

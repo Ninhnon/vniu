@@ -48,16 +48,19 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
   });
   async function onSubmit(data) {
     setIsLoading(true);
-    const response = await fetch('http://localhost:5199/api/v1/auths/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-    });
+    const response = await fetch(
+      'https://vniuvm.southeastasia.cloudapp.azure.com/api/v1/auths/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      }
+    );
 
     if (!response.ok) {
       setIsLoading(false);

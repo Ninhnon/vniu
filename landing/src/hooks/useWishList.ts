@@ -13,7 +13,7 @@ export const useWishList = () => {
   const fetchUserWishList = async () => {
     //Tam WishList
     const userWishList = await getRequest({
-      endPoint: `/api/v1/users/${session?.user?.id}/cart-items/filter-and-sort?PageIndex=1&PageSize=100`,
+      endPoint: `/api/v1/users/${session?.user?.id}/wish-list/filter-and-sort?PageIndex=1&PageSize=100`,
     });
     return userWishList.value.items;
   };

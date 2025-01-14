@@ -180,10 +180,9 @@ function ProductDetailScreen({
                 />
               </TouchableOpacity>
               <View style={{flex: 1}} />
-              <TouchableOpacity style={styles.cartButton}>
-                {/* onPress={() => setIsModalVisible(true)}> */}
+              {/* <TouchableOpacity style={styles.cartButton}>
                 <MaterialCommunityIcons name="cart" size={24} color={'#fff'} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </ImageBackground>
         ) : (

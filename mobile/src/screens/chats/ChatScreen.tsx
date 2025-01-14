@@ -84,25 +84,22 @@ const ChatScreen = () => {
       .build();
 
     setConnection(connect);
-
-    connect
-      .start()
-      .then(() => {
-        connect.on('ReceiveMessage', message => {
-          const newMessage = {
-            id: message.id,
-            content: message.content,
-            createdAt: new Date(message.createdDate),
-            userId: message.user.id,
-            name: message.user.userName,
-            avatarUrl: message.user.avatarUrl,
-            imageUrl: message.imageUrl,
-          };
-          setMessages(prevMessages => [...prevMessages, newMessage]);
-        });
-      })
-      .catch(err => console.error('Connection failed:', err));
   }, []);
+
+  if (connection) {
+    connection.on('ReceiveMessage', message => {
+      const newMessage = {
+        id: message.id,
+        content: message.content,
+        createdAt: new Date(message.createdDate),
+        userId: message.user.id,
+        name: message.user.userName,
+        avatarUrl: message.user.avatarUrl,
+        imageUrl: message.imageUrl,
+      };
+      setMessages(prevMessages => [...prevMessages, newMessage]);
+    });
+  }
 
   const handleSendMessage = async () => {
     if (!newMessage && imageFiles.length === 0) return;
@@ -118,7 +115,6 @@ const ChatScreen = () => {
       const response = await postRequest({
         endPoint: '/api/v1/chat-messages',
         formData: {
-          userId,
           content: newMessage,
         },
         isFormData: false,
@@ -149,7 +145,6 @@ const ChatScreen = () => {
         const response = await postRequest({
           endPoint: '/api/v1/chat-messages',
           formData: {
-            userId,
             imageUrl,
           },
           isFormData: false,
@@ -204,7 +199,7 @@ const ChatScreen = () => {
           <Ionicons name="grid-outline" size={24} color="#007BFF" />
         </TouchableOpacity>
         <TextInput
-          style={styles.input}
+          style={[styles.input, {color: colors.text}]}
           placeholder="Type a message..."
           placeholderTextColor={'#000'}
           value={newMessage}

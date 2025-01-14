@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation } from '@tanstack/react-query';
 import MessageBox from './MessageBox';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HiPaperAirplane, HiPhoto } from 'react-icons/hi2';
 import { ImageDialog } from '@/components/imageDialog';
 import { z } from 'zod';
@@ -87,28 +87,21 @@ const Body = ({ session }) => {
       .build();
     setConnection(connect);
   }, []);
-
-  useEffect(() => {
-    if (connection) {
-      connection
-        .start()
-        .then(() => {
-          connection.on('ReceiveMessage', (message) => {
-            const messageCustom = {
-              id: message.id,
-              content: message.content,
-              createdAt: new Date(message.createdDate),
-              userId: message.user.id,
-              name: message.user.userName,
-              avatarUrl: message.user.avatarUrl,
-              imageUrl: message.imageUrl,
-            };
-            setMessages((prevMessage) => [...prevMessage, messageCustom]);
-          });
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [connection]);
+  if (connection) {
+    connection.on('ReceiveMessage', (message) => {
+      console.log('🚀 ~ connection.on ~ message:', message);
+      const messageCustom = {
+        id: message.id,
+        content: message.content,
+        createdAt: new Date(message.createdDate),
+        userId: message.user.id,
+        name: message.user.userName,
+        avatarUrl: message.user.avatarUrl,
+        imageUrl: message.imageUrl,
+      };
+      setMessages((prevMessage) => [...prevMessage, messageCustom]);
+    });
+  }
 
   const handleSendMessage = async () => {
     if (!newMessage && imageFiles.length === 0) return;
@@ -147,7 +140,6 @@ const Body = ({ session }) => {
             setMessages((prevMessages) => [...prevMessages, temporaryMessage]);
             sendMessageMutation.mutate({
               body: {
-                userId,
                 imageUrl: image,
               },
             });
@@ -169,7 +161,6 @@ const Body = ({ session }) => {
       setMessages((prevMessages) => [...prevMessages, temporaryMessage]);
       sendMessageMutation.mutate({
         body: {
-          userId,
           content: newMessage,
         },
       });
@@ -187,7 +178,14 @@ const Body = ({ session }) => {
   const handleImagesChange = () => {
     setFormData({ ...formData, images: imageFiles });
   };
+  const scrollableDivRef = useRef(null);
 
+  useEffect(() => {
+    if (scrollableDivRef.current) {
+      scrollableDivRef.current.scrollTop =
+        scrollableDivRef.current.scrollHeight;
+    }
+  }, [messages]);
   return (
     <div className=" overflow-hidden">
       {isUploading ? (
@@ -204,10 +202,11 @@ const Body = ({ session }) => {
           </div>
         </DialogCustom>
       ) : null}
-      <div className="w-full h-[75%]">
+      <div className="w-full">
         <div
           id="scrollableDiv"
-          className="h-[600px] sm:h-[550px] w-full overflow-y-auto flex flex-col"
+          ref={scrollableDivRef}
+          className="h-[750px] w-full overflow-y-auto flex flex-col"
           key={'11111'}
         >
           <InfiniteScroll

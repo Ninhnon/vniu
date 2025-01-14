@@ -35,7 +35,11 @@ const MessageBox: React.FC<MessageBoxProps> = ({data}) => {
         />
       )}
 
-      <View style={[styles.messageContainer, isOwnMessage && styles.alignEnd]}>
+      <View
+        style={[
+          styles.messageContainer,
+          isOwnMessage ? styles.alignEnd : styles.alignStart,
+        ]}>
         <View style={styles.header}>
           <Text style={styles.sender}>{isOwnMessage ? 'You' : 'Admin'}</Text>
           <Text style={styles.timestamp}>
@@ -70,7 +74,10 @@ const MessageBox: React.FC<MessageBoxProps> = ({data}) => {
         ) : (
           <View
             style={[styles.textMessage, isOwnMessage && styles.ownTextMessage]}>
-            <Text style={styles.messageText}>{data.content}</Text>
+            <Text
+              style={[styles.messageText, !isOwnMessage && {color: '#000'}]}>
+              {data.content}
+            </Text>
           </View>
         )}
       </View>
@@ -98,6 +105,9 @@ const styles = StyleSheet.create({
   },
   alignEnd: {
     alignItems: 'flex-end',
+  },
+  alignStart: {
+    alignItems: 'flex-start',
   },
   header: {
     flexDirection: 'row',

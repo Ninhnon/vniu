@@ -17,7 +17,6 @@ export interface MessageResponseType {
 export interface MessageRequestType {
   content?: string;
   imageUrl?: string;
-  userId: string;
 }
 
 export interface ChatbotResponseType {

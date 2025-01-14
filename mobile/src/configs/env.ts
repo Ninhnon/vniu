@@ -1,5 +1,6 @@
-import { API_URL } from '@env'
+import {API_URL, DEEPAR_SDK} from '@env';
 
 export const ENV = {
-  API_URL
-}
+  API_URL,
+  DEEPAR_SDK,
+};

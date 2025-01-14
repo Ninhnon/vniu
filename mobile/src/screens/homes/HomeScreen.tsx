@@ -22,6 +22,7 @@ import SearchHeaderHome from '@components/ui/home/SearchHeaderHome';
 import {Layout, Skeleton} from '@components/base';
 import Banner from '@components/ui/home/Banner';
 import CategoriesHome from '@components/ui/home/CategoriesHome';
+import TryOnBanner from '@components/ui/home/TryOnBanner';
 
 const HomeScreen = ({navigation}: TabsStackScreenProps<'Home'>) => {
   const {colors} = useTheme();
@@ -223,6 +224,7 @@ const HomeScreen = ({navigation}: TabsStackScreenProps<'Home'>) => {
       <Layout.BodyScrollView>
         {/* FilterView             onPress={openFilterModal} */}
         <Banner />
+        <TryOnBanner navigation={navigation} />
         <CategoriesHome />
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, {color: colors.text}]}>

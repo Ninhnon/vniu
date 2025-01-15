@@ -41,8 +41,8 @@ const MessageBox: React.FC<MessageBoxProps> = ({data}) => {
           isOwnMessage ? styles.alignEnd : styles.alignStart,
         ]}>
         <View style={styles.header}>
-          <Text style={styles.sender}>{isOwnMessage ? 'You' : 'Admin'}</Text>
-          <Text style={styles.timestamp}>
+          <Text style={[styles.sender]}>{isOwnMessage ? '' : 'Admin'}</Text>
+          <Text style={[styles.timestamp]}>
             {isToday(messageDate)
               ? format(messageDate, 'p')
               : format(messageDate, 'M/d/yy p')}
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     marginRight: 5,
+    color: '#000',
   },
   timestamp: {
     fontSize: 12,

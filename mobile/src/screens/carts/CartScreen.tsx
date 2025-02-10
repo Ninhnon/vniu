@@ -19,6 +19,7 @@ import {CheckBox} from '@components/base';
 import {getRequest} from '@configs/fetch';
 import {getStringStorage} from 'src/functions/storageFunctions';
 import {useQuery} from '@tanstack/react-query';
+import {showToast} from '@hooks/app/useAppToastMessage';
 const userId = getStringStorage('id');
 const fetchUserCart = async () => {
   try {
@@ -38,7 +39,6 @@ const CartScreen = ({navigation}: TabsStackScreenProps<'Cart'>) => {
     queryKey: ['cartItems'],
     queryFn: () => fetchUserCart(),
   });
-
   const handleSelectItem = (cartItemId: any) => {
     setSelectedItems(prevSelected =>
       prevSelected.includes(cartItemId)
@@ -57,7 +57,9 @@ const CartScreen = ({navigation}: TabsStackScreenProps<'Cart'>) => {
       return total + item?.salePrice * item?.cartItem.quantity;
     }, 0);
   };
-
+  const handleOrderCHPlay = () => {
+    showToast('warning', 'This feature is not available on this platform');
+  };
   const handleOrder = () => {
     const itemsToOrder = cartItems.filter((item: {cartItemId: any}) =>
       selectedItems.includes(item?.id),
@@ -138,7 +140,7 @@ const CartScreen = ({navigation}: TabsStackScreenProps<'Cart'>) => {
         <Button
           disabled={!selectedItems || calculateTotalPrice() === 0}
           title="Order"
-          onPress={handleOrder}
+          onPress={handleOrderCHPlay}
         />
       </View>
     </SafeAreaView>

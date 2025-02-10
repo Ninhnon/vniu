@@ -16,8 +16,6 @@ import SearchScreen from '@screens/searchs/SearchScreen';
 import OrderScreen from '@screens/carts/OrderScreen';
 import OrderHistoryScreen from '@screens/carts/OrderHistoryScreen';
 import DonePaymentScreen from '@screens/carts/DonePaymentScreen';
-import GlassTryOn from '@screens/deepars/GlassTryOn';
-import ShoeTryOn from '@screens/deepars/ShoeTryOn';
 
 export type RootStackParamList = {
   TabsStack: NavigatorScreenParams<TabsStackParamList>;
@@ -36,8 +34,6 @@ export type RootStackParamList = {
   OrderScreen: undefined;
   OrderHistory: undefined;
   DonePaymentScreen: undefined;
-  GlassTryOn: undefined;
-  ShoeTryOn: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -71,8 +67,6 @@ const RootNavigator = ({toggleTheme}: any) => {
         name="DonePaymentScreen"
         component={DonePaymentScreen}
       />
-      <RootStack.Screen name="GlassTryOn" component={GlassTryOn} />
-      <RootStack.Screen name="ShoeTryOn" component={ShoeTryOn} />
     </RootStack.Navigator>
   );
 };

@@ -80,7 +80,10 @@ function ProductDetailScreen({
       }
     }
   };
-
+  const addToCartCHPlay = async () => {
+    showToast('success', 'Add to cart successfully');
+    navigation.navigate('TabsStack', {screen: 'Cart'});
+  };
   const addToCart = async () => {
     try {
       const response = await postRequest({
@@ -461,7 +464,7 @@ function ProductDetailScreen({
                   styles.addToCartButton,
                   isAddToCartDisabled && styles.disabledButton,
                 ]}
-                onPress={addToCart}
+                onPress={addToCartCHPlay}
                 disabled={isAddToCartDisabled}>
                 <Text style={styles.addToCartText}>Add to Cart</Text>
               </TouchableOpacity>

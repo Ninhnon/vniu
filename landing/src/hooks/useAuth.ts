@@ -25,7 +25,7 @@ export const useAuth = () => {
 
   const onRegister = async (data, callback) => {
     const res = await fetch(
-      `https://vniuvm.southeastasia.cloudapp.azure.com/api/v1/auths/register`,
+      `https://www.vniu.info.vn/api/v1/auths/register`,
       {
         method: 'POST',
         headers: {

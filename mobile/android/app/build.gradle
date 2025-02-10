@@ -74,13 +74,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.vniu"
+    namespace "com.vn.vniu"
     defaultConfig {
-        applicationId "com.vniu"
+        applicationId "com.vn.vniu"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.1"
+        versionCode 4
+        versionName "1.4"
     }
     signingConfigs {
         release {

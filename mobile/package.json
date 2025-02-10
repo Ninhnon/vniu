@@ -15,6 +15,8 @@
     "clean:all": "yarn clean:node && yarn clean:ios && yarn clean:android && yarn start ",
     "open-apk": "open ./android/app/build/outputs/apk/",
     "open-aab": "open .android/app/build/outputs/bundle/release/",
+    "android:apk": "cd android && ./gradlew assembleRelease && cd ..",
+    "android:aab": "npx react-native build-android --mode=release",
     "test": "jest"
   },
   "dependencies": {
@@ -40,7 +42,6 @@
     "react-native-actions-sheet": "^0.9.7",
     "react-native-circular-progress-indicator": "^4.4.2",
     "react-native-date-picker": "^4.3.7",
-    "react-native-deepar": "^0.11.0",
     "react-native-dotenv": "^3.4.11",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-element-dropdown": "^2.10.4",

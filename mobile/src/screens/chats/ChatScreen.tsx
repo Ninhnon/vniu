@@ -74,7 +74,7 @@ const ChatScreen = () => {
     const accessToken = getStringStorage('accessToken');
     const connect = new HubConnectionBuilder()
       .withUrl(
-        `https://vniuvm.southeastasia.cloudapp.azure.com:5000/hubs/chat?access_token=${accessToken}`,
+        `https://www.vniu.info.vn:5000/hubs/chat?access_token=${accessToken}`,
         {
           skipNegotiation: true,
           transport: HttpTransportType.WebSockets,

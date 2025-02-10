@@ -24,23 +24,20 @@ export const useAuth = () => {
   };
 
   const onRegister = async (data, callback) => {
-    const res = await fetch(
-      `https://vniuvm.southeastasia.cloudapp.azure.com/api/v1/auths/register`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userName: data.name,
-          firstName: '',
-          lastName: '',
-          email: data.email,
-          password: data.password,
-          phoneNumber: '0123456789',
-        }),
-      }
-    );
+    const res = await fetch(`https://www.vniu.info.vn/api/v1/auths/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userName: data.name,
+        firstName: '',
+        lastName: '',
+        email: data.email,
+        password: data.password,
+        phoneNumber: '0123456789',
+      }),
+    });
 
     const response = await res.json();
 

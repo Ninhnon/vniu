@@ -49,7 +49,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
   async function onSubmit(data) {
     setIsLoading(true);
     const response = await fetch(
-      'https://vniuvm.southeastasia.cloudapp.azure.com/api/v1/auths/login',
+      'https://www.vniu.info.vn/api/v1/auths/login',
       {
         method: 'POST',
         headers: {

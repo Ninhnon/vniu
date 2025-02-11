@@ -34,7 +34,16 @@ function ProductDetailLeft({ data }) {
         thumbWidth={60}
         className="productCarousel"
       >
-        {data?.activeObject
+        {data?.activeObject &&
+        data?.activeObject?.activeProductImages.length() > 8
+          ? data?.activeObject?.activeProductImages
+              .slice(0, 8)
+              .map((item, index) => (
+                <div key={`${item.id}-${index}`}>
+                  <img src={item.imageUrl} alt="product" />
+                </div>
+              ))
+          : data?.activeObject?.activeProductImages
           ? data?.activeObject?.activeProductImages.map((item, index) => (
               <div key={`${item.id}-${index}`}>
                 <img src={item.imageUrl} alt="product" />

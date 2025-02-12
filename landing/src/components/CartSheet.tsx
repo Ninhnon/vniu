@@ -22,6 +22,7 @@ import { useCart } from '@/hooks/useCart';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { CartLineItems } from './CartLineItems';
 import { useEffect, useState } from 'react';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
 // import { useQueryClient } from '@tanstack/react-query';
 
 export function CartSheet() {
@@ -60,10 +61,10 @@ export function CartSheet() {
     <Sheet>
       <SheetTrigger asChild>
         <Button
-          aria-label="Open cart"
+          // aria-label="Open cart"
           variant="outline"
           size="icon"
-          className="relative"
+          className="relative h-10 w-36"
         >
           {itemCount > 0 && (
             <Badge
@@ -73,9 +74,9 @@ export function CartSheet() {
               {itemCount}
             </Badge>
           )}
-          {CommonSvg.cart({
-            className: 'text-slate-600 stroke-zinc-950 h-4 w-4',
-          })}
+          {
+            <AiOutlineShoppingCart className="text-slate-600 stroke-zinc-950 w-4 h-4" />
+          }
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">

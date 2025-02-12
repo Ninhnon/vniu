@@ -35,7 +35,7 @@ function ProductDetailLeft({ data }) {
         className="productCarousel"
       >
         {data?.activeObject &&
-        data?.activeObject?.activeProductImages.length() > 8
+        data?.activeObject?.activeProductImages?.length > 8
           ? data?.activeObject?.activeProductImages
               .slice(0, 8)
               .map((item, index) => (

@@ -28,7 +28,7 @@ const AuthInformationForm = ({
     if (addresses) {
       const addressTemps = addresses.map((address) => ({
         addressId: address?.id,
-        addressValue: `${address?.unitNumber}, ${address?.streetNumber}, ${address?.addressLine1}, ${address?.city}, ${address?.province}`,
+        addressValue: `${address?.unitNumber}, ${address?.streetNumber}, ${address?.addressLine1}, ${address?.province}, ${address?.city}`,
       }));
       setAddressList(addressTemps);
       if (addressTemps.length > 0) {

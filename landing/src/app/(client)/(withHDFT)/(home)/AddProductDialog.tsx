@@ -241,7 +241,7 @@ const AddProductDialog = () => {
           {/* Show error */}
           {showError && (
             <div className="text-red-600 mt-1">
-              Vui lòng chọn kích cỡ sản phẩm
+              Please choose your size before selecting quantity
             </div>
           )}
           {/* Show error */}
@@ -249,7 +249,7 @@ const AddProductDialog = () => {
 
         <div className="flex w-full flex-col flex-wrap md:flex-nowrap gap-3">
           <Label className="font-semibold text-[10px] sm:text-[14px]">
-            Số lượng
+            Quantity
           </Label>
           <Controller
             control={control}
@@ -275,7 +275,7 @@ const AddProductDialog = () => {
 
           {/* Start In Inventory */}
           <Label className="font-normal italic text-[10px] sm:text-[14px]">
-            Tồn kho: {selectedQuantity}
+            Quantity in: {selectedQuantity}
           </Label>
           {/* End In Inventory */}
         </div>
